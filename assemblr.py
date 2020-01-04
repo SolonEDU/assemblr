@@ -202,11 +202,22 @@ def addfriend():
     db.session.commit()
     return redirect(url_for('find'))
 
-@app.route("/new_project")
+@app.route("/new_project/<teamid>")
 @login_required
-def new_project():
+def new_project(teamid):
+    if request.method == 'POST':
+        newProjectName = request.form['projectname']
+        newProjectDescription = request.form['description']
+        newProjectRepo = request.form['repo']
+        newProject = Project(projectname = newProjectName, description = newProjectDescription, teamid = teamid, repo = newProjectRepo)
+        db.session.add(newProject)
+        db.commit()
+        newProjectRecord = Project.query.filter_by(projectname = newProjectName).first()
+        newProjectId = newProjectRecord.id
+        return redirect(url_for('project', projectid = newProjectId))
     return render_template(
-        "new_project.html"
+        "new_project.html",
+        teamid = teamid
     )
 
 
@@ -258,7 +269,7 @@ def profile(uid):
 @login_required
 def team(teamid):
     teamid = int(teamid)
-    teamName = Team.query.filter_by(id=teamid).first().teamname
+    teamObject = Team.query.filter_by(id=teamid).first()
     members = Member.query.filter_by(teamid=teamid).all()
     memberUsers = []
     for member in members:
@@ -267,9 +278,10 @@ def team(teamid):
     projects = Project.query.filter_by(teamid=teamid).all()
     return render_template(
         "team.html",
-        teamName = teamName,
+        team = teamObject,
         members = memberUsers,
-        projects = projects
+        projects = projects,
+        teamid = teamid
     )
 
 @app.route("/project/<projectid>")
