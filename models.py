@@ -48,7 +48,6 @@ class Role(db.Model):
 
 class Technology(db.Model):
     uid = db.Column(db.Integer, primary_key=True)
-    projectmanager = db.Column(db.Boolean, nullable=False)
     git = db.Column(db.Boolean, nullable=False)
     html = db.Column(db.Boolean, nullable=False)
     css = db.Column(db.Boolean, nullable=False)
