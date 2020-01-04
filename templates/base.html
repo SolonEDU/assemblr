@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 {% block style %}
-<html style="overflow-y:hidden;">
+<html style="overflow-y:hidden">
 {% endblock %}
+
 
 <head>
     <title>
@@ -13,7 +14,7 @@
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
 
-    <body>
+    <body {% block color %} style = "background-color: #FF5A5F;" {% endblock %}>
         <div class="container m-auto">
             {% block nav %}
             {% endblock %}
