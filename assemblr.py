@@ -46,7 +46,7 @@ def my_people():
         "my_people.html"
     )
 
-@app.route("other_people")
+@app.route("/other_people")
 def other_people():
     return render_template(
         "other_people.html"

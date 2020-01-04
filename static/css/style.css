@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+
 html {
     scroll-behavior: smooth;
     scrollbar-width: none;
@@ -13,6 +15,6 @@ html {
     flex-direction: column;
 
     margin: 0;
-    font-family: "Karla", sans-serif;
+    font-family: 'Raleway', sans-serif;
     font-size: 20px;
 }
