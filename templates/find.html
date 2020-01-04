@@ -1,5 +1,14 @@
-{% extends "base.html" %} {% block title %} Find Friends {% endblock %} {% block
-body %}
+{% extends "base.html" %}
+
+{% block title %}
+    Find Friends
+{% endblock %}
+
+{% block navItems %}
+<th><a href="/network">Network</a></th>
+{% endblock %}
+
+{% block body %}
 <div class="container-fluid mt-5">
 	<div class="row">
 		<div class="col-md-3 mb-5">
@@ -26,7 +35,8 @@ body %}
 						<button type="submit" class="btn btn-primary btn-lg btn-block">
 							Add As Friend
 						</button>
-					</form>
+                    </form>
+                    <br>
 					<a href="/profile/{{user.uid}}" class="btn btn-primary btn-lg btn-block">View Profile</a>
 				</div>
 			</div>
