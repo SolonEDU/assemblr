@@ -17,9 +17,16 @@
     <body {% block color %} style = "background-color: #FF5A5F;" {% endblock %}>
         <div class="container m-auto">
             {% block nav %}
-            <div style="margin-top: 20px;">
-                <a href="./home" class="nav-content">ASSEMBLR</a>
-            </div>
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-end fixed-top" style="margin-bottom:50px;">
+                <a class="navbar-brand" href="/home" style="float: left;">ASSEMBLR</a>
+                <ul class="navbar-nav">
+                    {% block navItems %}
+                    {% endblock %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </nav>
             {% endblock %}
 
             {% with messages = get_flashed_messages(with_categories=true) %}
