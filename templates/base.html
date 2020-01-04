@@ -24,6 +24,8 @@
             <nav>
                 <div class="nav-content">
                     <table>
+                        {% block navItems %}
+                        {% endblock %}
                         <th><a href="./profile/{{ session['username'] }}">account</a></th>
                         <th><a href="./logout">logout</a></th>
                     </table>
