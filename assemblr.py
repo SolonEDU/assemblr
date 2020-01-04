@@ -206,7 +206,7 @@ def new_team():
 def profile(uid):
     user = User.query.filter_by(uid=uid).first()
     return render_template(
-        "profile.html", 
+        "profile.html",
         user=user
     )
 
@@ -222,14 +222,14 @@ def project():
 @app.route("/team/<teamid>")
 @login_required
 def team(teamid):
-    print(teamid)
+    # print(teamid)
     teamName = Team.query.filter_by(id=teamid).first().teamname
-    print(teamName)
+    # print(teamName)
     members = Member.query.filter_by(teamid=teamid).all()
     memberUsers = []
     for member in members:
         user = User.query.filter_by(uid=member.uid).first()
-        print(user.firstname)
+        # print(user.firstname)
         memberUsers.append(user)
     return render_template(
         "team.html",
