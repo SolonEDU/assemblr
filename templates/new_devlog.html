@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block scroll %}
+<html style="overflow-y:scroll">
+{% endblock %}
+
+{% block title %}
+    Create Devlog
+{% endblock %}
+
+{% block navItems %}
+<th><a href="/network">Network</a></th>
+<th><a href="/find">Find</a></th>
+{% endblock %}
+
+{% block body %}
+<div id="landing">
+    <form class="p-5 bg-light text-dark text-center" action="/new_devlog/{{ projectid }}" method="POST">
+        <div class="form-group">
+            <label for="content" class="font-weight-bold">Post</label>
+            <textarea name="content" type="text" class="form-control" id="content" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Create Post</button>
+    </form>
+</div>
+{% endblock %}
