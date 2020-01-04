@@ -219,7 +219,19 @@ def new_team():
     if request.method == 'POST':
         newTeamMemberList = request.form.getlist('members')
         newTeamMemberList = [ int(x) for x in newTeamMemberList ]
+        newTeamMemberList.append(session['uid'])
         print(newTeamMemberList)
+        newTeamName = request.form['teamname']
+        newTeam = Team(teamname = newTeamName)
+        db.session.add(newTeam)
+        db.session.commit()
+        newTeamRecord = Team.query.filter_by(teamname=newTeamName).first()
+        newTeamId = newTeamRecord.id
+        for member in newTeamMemberList:
+            newMember = Member(teamid=newTeamId, uid=member)
+            db.session.add(newMember)
+            db.session.commit()
+        return redirect(url_for('team', teamid = newTeamId))
         # for newTeamMember in newTeamMemberList:
         #     newmember = Member(teamid)
     else:    
@@ -258,6 +270,7 @@ def project():
 @login_required
 def team(teamid):
     # print(teamid)
+    teamid = int(teamid)
     teamName = Team.query.filter_by(id=teamid).first().teamname
     # print(teamName)
     members = Member.query.filter_by(teamid=teamid).all()
