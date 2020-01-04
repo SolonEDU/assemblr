@@ -8,15 +8,8 @@ body %}
 				<div class="card-body">
 					<h4>GitHub: MattChann</h4>
 					<h4>Email: nothx@dontemailme.com</h4>
-					<br />
-					<form action="/find" method="POST">
-						<button type="submit" class="btn btn-primary btn-lg btn-block">
-							Add As Friend
-						</button>
-					</form>
-					<a href="/profile/0" class="btn btn-primary btn-lg btn-block"
-						>View Profile</a
-					>
+					<br>
+                    <a href="/profile/0" class="btn btn-primary btn-lg btn-block">View Profile</a>
 				</div>
 			</div>
 		</div>
@@ -27,12 +20,14 @@ body %}
 				<div class="card-body">
 					<h4>GitHub: {{user.github}}</h4>
 					<h4>Email: {{user.email}}</h4>
-					<br />
-					<a
-						href="/profile/{{user.uid}}"
-						class="btn btn-primary btn-lg btn-block"
-						>View Profile</a
-					>
+                    <br>
+                    <form action="/addfriend" method="POST">
+                        <input type="hidden" id="friendid" name="friendid" value={{user.uid}}>
+						<button type="submit" class="btn btn-primary btn-lg btn-block">
+							Add As Friend
+						</button>
+					</form>
+					<a href="/profile/{{user.uid}}" class="btn btn-primary btn-lg btn-block">View Profile</a>
 				</div>
 			</div>
 		</div>
