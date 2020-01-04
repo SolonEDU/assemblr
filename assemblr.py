@@ -131,8 +131,8 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
-    uid = session['uid'] 
-    teams = Member.query.filter_by(uid=uid).all() 
+    uid = session['uid']
+    teams = Member.query.filter_by(uid=uid).all()
     teamsData = {}
     for team in teams:
         membersUserArr = []
@@ -220,4 +220,5 @@ if __name__ == "__main__":
     db.init_app(app)
     with app.app_context():
         db.create_all()
+    app.debug = True
     app.run(host='0.0.0.0')
