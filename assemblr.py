@@ -173,16 +173,23 @@ def network():
 @login_required
 def find():
     uid = session['uid']
-    userids = User.query.with_entities(User.uid).all()
-    friendids = Friend.query.filter_by(uid=uid).with_entities(Friend.friend).all()
+    allusers = User.query.all()
+    friends = Friend.query.filter_by(uid=uid).all()
+    userids = []
+    friendids = []
+    for user in allusers:
+        userids.append(user.uid)
+    for friend in friends:
+        friendids.append(friend.friend)
     ids = []
     for id in userids:
         if id not in friendids:
             ids.append(id)
     users = []
     for id in ids:
-        user = User.query.filter_by(uid=id).first()
-        users.append(user)
+        if id != uid:
+            user = User.query.filter_by(uid=id).first()
+            users.append(user)
     return render_template(
         "find.html",
         users=users
