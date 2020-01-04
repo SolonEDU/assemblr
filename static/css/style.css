@@ -23,3 +23,7 @@ html {
     font-family: 'Raleway', sans-serif;
     font-size: 20px;
 }
+
+.custom {
+    width: 125px !important;
+}
