@@ -42,7 +42,7 @@ Home
                 </div>
             </div>
         </div>
-        {% for team,users in teams %}
+        {% for team,users in teams.items() %}
         <div class="col-md-4 mb-5">
             <div class="card">
                 <h3 class="card-header">{{team.teamname}}</h3>
