@@ -12,8 +12,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def root():
-    return __name__;
+    return "<h1 style='color:blue'>Hello There!</h1>";
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run()
+    app.run(host='0.0.0.0')
