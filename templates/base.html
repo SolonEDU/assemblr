@@ -3,7 +3,6 @@
 <html style="overflow-y:hidden">
 {% endblock %}
 
-
 <head>
     <title>
         {% block title %}{% endblock %} :: ASSEMBLR
@@ -12,14 +11,26 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/nav.css">
 </head>
 
     <body {% block color %} style = "background-color: #FF5A5F;" {% endblock %}>
-        <div class="container m-auto">
+        <div class="container-fluid m-auto">
             {% block nav %}
-            <div style="margin-top: 20px;">
+            <div style="margin-top: 20px; display: flex;">
                 <a href="./home" class="nav-content">ASSEMBLR</a>
             </div>
+
+            <nav>
+                <div class="nav-content">
+                    <table>
+                        {% block navItems %}
+                        {% endblock %}
+                        <th><a href="./profile/{{ session['username'] }}">account</a></th>
+                        <th><a href="./logout">logout</a></th>
+                    </table>
+                </div>
+            </nav>
             {% endblock %}
 
             {% with messages = get_flashed_messages(with_categories=true) %}

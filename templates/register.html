@@ -14,62 +14,49 @@
 {% endblock %}
 
 {% block body %}
-<div class="card">
-    <form>
-
-        <div class="form-group row">
-            <label for="firstName" class="col-sm-1 col-form-label">First Name</label>
-            <div class="col-sm-11">
-                <input type="text" class="form-control" id="firstName" placeholder="John">
+{{super()}}
+<div id="landing">
+    <form class="p-5 bg-light text-dark text-center" action="/register" method="POST">
+        <p class="lead font-weight-bolder">REGISTER</h1>
+            <div class="form-group">
+                <label for="email" class="font-weight-bold">Email</label>
+                <input name="email" type="email" class="form-control" id="email" required>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="lastName" class="col-sm-1 col-form-label">Last Name</label>
-            <div class="col-sm-11">
-                <input type="text" class="form-control" id="lastName" placeholder="Doe">
+            <div class="form-group mr-1" style="float: left;">
+                <label for="firstname" class="font-weight-bold">First Name</label>
+                <input name="firstname" type="text" class="form-control" id="firstname" required>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="email" class="col-sm-1 col-form-label">Email</label>
-            <div class="col-sm-11">
-                <input type="email" class="form-control" id="email" placeholder="email@example.com">
+            <div class="form-group" style="float:right;">
+                <label for="lastname" class="font-weight-bold">Last Name</label>
+                <input name="lastname" type="text" class="form-control" id="lastname" required>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="github" class="col-sm-1 col-form-label">GitHub Username</label>
-            <div class="col-sm-11">
-                <input type="text" class="form-control" id="github" placeholder="Octocat">
+            <br>
+            <div class="form-group" style="float:left;">
+                <label for="age" class="font-weight-bold">Age</label>
+                <input name="age" type="number" class="form-control" id="age" required>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="age" class="col-sm-1 col-form-label">Age</label>
-            <div class="col-sm-11">
-                <input type="text" class="form-control" id="age" placeholder="21">
+            <div class="form-group" style="float:right;">
+                <label for="city" class="font-weight-bold">City</label>
+                <input name="city" type="text" class="form-control" id="city" required>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="city" class="col-sm-1 col-form-label">City</label>
-            <div class="col-sm-11">
-                <input type="text" class="form-control" id="city" placeholder="New York City">
+            <div class="form-group">
+                <label for="bio" class="font-weight-bold">Bio</label>
+                <input name="bio" type="text" class="form-control" id="bio" required>
             </div>
-        </div>
-        Which Role(s) Are You Comfortable With? <br>
-        <div class="btn-group-toggle row" data-toggle="buttons">
-            <label class="btn btn-primary active col-sm-3">
-                <input type="checkbox" checked autocomplete="off"> Project Manager
-            </label>
-            <label class="btn btn-primary active col-sm-3">
-                <input type="checkbox" checked autocomplete="off"> Frontend
-            </label>
-            <label class="btn btn-primary active col-sm-3">
-                <input type="checkbox" checked autocomplete="off"> Backend
-            </label>
-            <label class="btn btn-primary active col-sm-3">
-                <input type="checkbox" checked autocomplete="off"> Design
-            </label>
-        </div>
-        Skills
-        Bio
+            <div class="font-weight-bold">Roles</div c>
+            <div class="font-weight-bold">Skills</div>
+            <div class="form-group" style="float:left">
+                <label for="password" class="font-weight-bold">Password</label>
+                <input name="password" type="password" class="form-control" id="password" required>
+            </div>
+            <div class="form-group" style="float:right">
+                <label for="password2" class="font-weight-bold">Confirm Password</label>
+                <input name="password2" type="password" class="form-control" id="password2" required>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-success">Register</button>
+            <br>
+            <a href=/login class="badge badge-light mt-3">Already have an account? Login</a>
     </form>
 </div>
 {% endblock %}

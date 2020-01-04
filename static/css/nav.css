@@ -1,0 +1,61 @@
+nav {
+    margin-right: 20px;
+    height: 7vh;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-top: 20px;
+    font-family: "Lexend Deca", serif;
+    text-align: center;
+    transition: 0.5s;
+}
+
+nav a {
+    font-size: 20px;
+    display: block;
+    /* color: rgb(57, 125, 214); */
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+nav a:hover {
+    /* font-size: 25px; */
+    text-decoration: none;
+    color: black;
+}
+
+#nav-open {
+    position: fixed;
+    top: 0;
+    right: 20px;
+    font-size: 20px;
+    margin-right: 5px;
+    padding-top: 20px;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+#nav-close {
+    display: inline-table;
+    position: relative;
+    top: 0;
+    right: 20px;
+    font-size: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+    visibility: visible;
+}
+
+.nav-content {
+    display: block;
+}
+
+.nav-content table th {
+    padding-left: 30px;
+}
