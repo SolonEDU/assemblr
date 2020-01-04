@@ -13,6 +13,7 @@ html {
 .nav-content {
     font-family: 'Raleway', 'sans-serif';
     font-size: 30px;
+    margin-left: 10px;
     color: black;
 }
 
@@ -37,4 +38,8 @@ html {
 
 .custom {
     width: 125px !important;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #8064A2 !important;
 }
