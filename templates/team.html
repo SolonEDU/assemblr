@@ -9,7 +9,15 @@
 {% endblock %}
 
 {% block body %}
-<p style="font-size: 30px; font-family: Lexend Deca, serif;">{{ teamName }}</p>
+<div style="font-family: Lexend Deca, serif;">
+<p >Team Name: {{ teamName }}</p>
+
+<p style="font-size: 30px;">Members</p>
+{% for member in members %}
+{{ member.firstname }} {{ member.lastname }}
+<br>
+{% endfor %}
+</div>
 
 <a href="/new_project" class="btn btn-primary">Create new project</a>
 
