@@ -10,7 +10,7 @@
 
 {% block body %}
 <div id="landing">
-    <form class="p-5 bg-light text-dark text-center" action="/new_team" method="POST">
+    <form class="p-5 bg-light text-dark text-center" action="/new_project/{{ teamid }}" method="POST">
         <div class="form-group">
             <label for="projectname" class="font-weight-bold">Project Name</label>
             <input name="projectname" type="text" class="form-control" id="projectname" required>
