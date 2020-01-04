@@ -12,6 +12,7 @@ class User(db.Model):
     age = db.Column(db.Integer, nullable=False)
     city = db.Column(db.Text, nullable=False)
     bio = db.Column(db.Text, nullable=False)
+    github = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
         return '<User {self.email} with id {self.id} and password {self.password}>'
