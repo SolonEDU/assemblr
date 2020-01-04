@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block scroll %}
+<html style="overflow-y:scroll">
+{% endblock %}
+
+{% block title %}
+    Create Team
+{% endblock %}
+
+{% block navItems %}
+<th><a href="/network">Network</a></th>
+{% endblock %}
+
+{% block body %}
+<div id="landing">
+    <form class="p-5 bg-light text-dark text-center" action="/new_team" method="POST">
+        <div class="form-group">
+            <label for="teamname" class="font-weight-bold">Team Name</label>
+            <input name="teamname" type="text" class="form-control" id="teamname" required>
+        </div>
+        <button type="submit" class="btn btn-success">Create Team</button>
+    </form>
+</div>
+{% endblock %}
