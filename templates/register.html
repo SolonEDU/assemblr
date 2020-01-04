@@ -3,3 +3,64 @@
 {% block title %}
     Register
 {% endblock %}
+
+{% block body %}
+<div class="card">
+    <form>
+
+        <div class="form-group row">
+            <label for="firstName" class="col-sm-1 col-form-label">First Name</label>
+            <div class="col-sm-11">
+                <input type="text" class="form-control" id="firstName" placeholder="John">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-1 col-form-label">Last Name</label>
+            <div class="col-sm-11">
+                <input type="text" class="form-control" id="lastName" placeholder="Doe">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="email" class="col-sm-1 col-form-label">Email</label>
+            <div class="col-sm-11">
+                <input type="email" class="form-control" id="email" placeholder="email@example.com">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="github" class="col-sm-1 col-form-label">GitHub Username</label>
+            <div class="col-sm-11">
+                <input type="text" class="form-control" id="github" placeholder="Octocat">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="age" class="col-sm-1 col-form-label">Age</label>
+            <div class="col-sm-11">
+                <input type="text" class="form-control" id="age" placeholder="21">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="city" class="col-sm-1 col-form-label">City</label>
+            <div class="col-sm-11">
+                <input type="text" class="form-control" id="city" placeholder="New York City">
+            </div>
+        </div>
+        Which Role(s) Are You Comfortable With? <br>
+        <div class="btn-group-toggle row" data-toggle="buttons">
+            <label class="btn btn-primary active col-sm-3">
+                <input type="checkbox" checked autocomplete="off"> Project Manager
+            </label>
+            <label class="btn btn-primary active col-sm-3">
+                <input type="checkbox" checked autocomplete="off"> Frontend
+            </label>
+            <label class="btn btn-primary active col-sm-3">
+                <input type="checkbox" checked autocomplete="off"> Backend
+            </label>
+            <label class="btn btn-primary active col-sm-3">
+                <input type="checkbox" checked autocomplete="off"> Design
+            </label>
+        </div>
+        Skills
+        Bio
+    </form>
+</div>
+{% endblock %}
