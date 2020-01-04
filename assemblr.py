@@ -18,6 +18,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "uid" not in session:
+            flash("You must be logged in to view this page", "error")
             return redirect(url_for('root'))
         return f(*args, **kwargs)
     return decorated_function
