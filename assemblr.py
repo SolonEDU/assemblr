@@ -174,7 +174,7 @@ def network():
 def find():
     uid = session['uid']
     userids = User.query.with_entities(User.uid).all()
-    friendids = Friend.query.filter_by(uid=uid)with_entities(Friend.friend).all()
+    friendids = Friend.query.filter_by(uid=uid).with_entities(Friend.friend).all()
     ids = []
     for id in userids:
         if id not in friendids:
