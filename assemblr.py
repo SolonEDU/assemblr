@@ -131,8 +131,7 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
-    # uid = session['uid']
-    uid = 0 # replace uid lata
+    uid = session['uid'] 
     teams = Member.query.filter_by(uid=uid).all() 
     teamsData = {}
     for team in teams:
