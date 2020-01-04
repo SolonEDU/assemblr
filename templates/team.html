@@ -1,34 +1,50 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ teamName }}
+    Team
 {% endblock %}
 
 {% block navItems %}
 <th><a href="/network">Network</a></th>
+<th><a href="/find">Find</a></th>
 {% endblock %}
 
 {% block body %}
-<div style="font-family: Lexend Deca, serif;">
-<p >Team Name: {{ teamName }}</p>
-
-<p style="font-size: 30px;">Members</p>
-{% for member in members %}
-{{ member.firstname }} {{ member.lastname }}
-<br>
-{% endfor %}
-</div>
-
-<a href="/new_project" class="btn btn-primary">Create new project</a>
-
-{% for project in projects %}
-<div class="card">
-    <h3 class="card-header">{{ project.projectname }}</h3>
-    <div class="card-body">
-        <h4>Description: {{ project.description }}</h4>
-        <br>
-        <a href="/project/{{project.id}}" class="btn btn-primary btn-lg btn-block">View Project</a>
+<div class="mt-4">
+    <div class="container p-5 bg-light text-dark" style="width: 100rem;">
+        <h1>Team: {{team.teamname}}</h1>
+        <hr>
+        <h3>Members:</h3>
+        {% for user in members %}
+        <div class="list-group">
+            <a href="/profile/{{user.uid}}" class="list-group-item list-group-item-action">
+                {{user.firstname}} {{user.lastname}}
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+    <div class="container p-5 bg-light text-dark" style="width: 100rem;">
+        <h2>Projects:</h2>
+        <hr>
+        <div class="row">
+            <a href="/new_project/{{team.id}}" class="btn btn-primary btn-lg btn-block">Create New Project</a>
+            {% for project in projects %}
+            <div class="col-md-4 mt-5">
+                <div class="card">
+                    <div class="card-header">Project: {{project.projectname}}</div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            Description:<br>
+                            {{project.description}}
+                        </div>
+                        <br>
+                        <a href="/project/{{project.id}}" class="btn btn-primary btn-lg btn-block">View Project</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
-{% endfor %}
 {% endblock %}
