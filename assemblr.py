@@ -52,31 +52,31 @@ def other_people():
         "other_people.html"
     )
 
-@app.route("new_project")
+@app.route("/new_project")
 def new_project():
     return render_template(
         "new_project.html"
     )
 
-@app.route("new_team")
+@app.route("/new_team")
 def new_team():
     return render_template(
         "new_team.html"
     )
 
-@app.route("profile")
+@app.route("/profile")
 def profile():
     return render_template(
         "profile.html"
     )
 
-@app.route("project")
+@app.route("/project")
 def project():
     return render_template(
         "project.html"
     )
 
-@app.route("team")
+@app.route("/team")
 def team():
     return render_template(
         "team.html"
