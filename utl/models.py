@@ -35,7 +35,7 @@ class Message(db.Model):
     senderid = db.Column(db.Integer, nullable=False)
     receiverid = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
 
 class Role(db.Model):
     uid = db.Column(db.Integer, primary_key=True)
@@ -66,6 +66,15 @@ class Team(db.Model):
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projectname = db.Column(db.String(20), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    repo = db.Column(db.Text, nullable=False)
     teamid = db.Column(db.Integer, nullable=False)
 
+class Devlog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    projectid = db.Column(db.Integer, nullable=False)
+    uid = db.Column(db.Integer, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False,
+    default=datetime.utcnow())
         
