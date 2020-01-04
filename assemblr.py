@@ -13,6 +13,7 @@ Message = models.Message
 Member = models.Member
 Team = models.Team
 Project = models.Project
+Devlog = models.Devlog
 import sqlite3
 import os
 
@@ -261,11 +262,13 @@ def project(projectid):
     for user in users:
         member = User.query.filter_by(uid=user.id).first()
         members.append(member)
+    devlog = Devlog.query.filter_by(projectid=projectid).order_by(Devlog.timestamp.desc())
     return render_template(
         "project.html",
         project = project,
         team = team,
-        members = 
+        members = members,
+        devlog = devlog
     )
 
 if __name__ == "__main__":
