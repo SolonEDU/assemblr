@@ -14,7 +14,28 @@
 {% endblock %}
 
 {% block body %}
-<div class="card">
+{{super()}}
+<div id="landing">
+    <form class="p-5 bg-light text-dark text-center" action="/register" method="POST">
+        <p class="lead font-weight-bolder">REGISTER</h1>
+            <div class="form-group">
+                <label for="username" class="font-weight-bold">Username</label>
+                <input name="username" type="text" class="form-control" id="username">
+            </div>
+            <div class="form-group">
+                <label for="password" class="font-weight-bold">Password</label>
+                <input name="password" type="password" class="form-control" id="password">
+            </div>
+            <div class="form-group">
+                <label for="confirm" class="font-weight-bold">Confirm Password</label>
+                <input name="confirm" type="password" class="form-control" id="confirm">
+            </div>
+            <button type="submit" class="btn btn-success">Register</button>
+            <br>
+            <a href=/login class="badge badge-light mt-3">Already have an account? Login</a>
+    </form>
+</div>
+<!-- <div class="card">
     <form>
 
         <div class="form-group row">
@@ -71,5 +92,5 @@
         Skills
         Bio
     </form>
-</div>
+</div> -->
 {% endblock %}
