@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block scroll %}
+<html style="overflow-y:scroll">
+{% endblock %}
+
+{% block title %}
+    Create Project
+{% endblock %}
+
+{% block navItems %}
+<th><a href="/network">Network</a></th>
+<th><a href="/find">Find</a></th>
+{% endblock %}
+
+{% block body %}
+<div id="landing">
+    <form class="p-5 bg-light text-dark text-center" action="/new_team" method="POST">
+        <div class="form-group">
+            <label for="projectname" class="font-weight-bold">Project Name</label>
+            <input name="projectname" type="text" class="form-control" id="projectname" required>
+        </div>
+        <div class="form-group">
+            <label for="description" class="font-weight-bold">Description</label>
+            <textarea name="description" type="text" class="form-control" id="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="repo" class="font-weight-bold">Github Repository Link</label>
+            <input name="repo" type="text" class="form-control" id="repo" required>
+        </div>
+        <button type="submit" class="btn btn-success">Create Project</button>
+    </form>
+</div>
+{% endblock %}
