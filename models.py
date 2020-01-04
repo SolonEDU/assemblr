@@ -71,6 +71,8 @@ class Team(db.Model):
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projectname = db.Column(db.String(20), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     teamid = db.Column(db.Integer, nullable=False)
+    repo = db.Column(db.Text, nullable=False)
 
         
