@@ -4,10 +4,21 @@
 Home
 {% endblock %}
 
+{% block navItems %}
+<th><a href="./network">Network</a></th>
+{% endblock %}
+
 {% block body %}
 <div class="container-fluid mt-5">
     <div class="row">
         <div class="col-md-2 mb-5">
+            <a href="/newteam" class="btn btn-primary btn-lg btn-block">
+                <br><br><br>
+                Create a new team
+                <br><br><br><br>
+            </a>
+        </div>
+        <div class="col-md-4 mb-5">
             <div class="card">
                 <h3 class="card-header">Solon</h3>
                 <div class="card-body">
@@ -27,12 +38,12 @@ Home
                         </a>
                     </div>
                     <br>
-                    <a href="/teams/0" class="btn btn-primary btn-lg btn-block">View Team</a>
+                    <a href="/team/0" class="btn btn-primary btn-lg btn-block">View Team</a>
                 </div>
             </div>
         </div>
         {% for team,users in teams %}
-        <div class="col-md-2 mb-5">
+        <div class="col-md-4 mb-5">
             <div class="card">
                 <h3 class="card-header">{{team.teamname}}</h3>
                 <div class="card-body">
@@ -46,7 +57,7 @@ Home
                     {% endfor %}
                 </div>
                 <br>
-                <a href="/teams/{{team.id}}" class="btn btn-primary btn-lg btn-block">View Team</a>
+                <a href="/team/{{team.id}}" class="btn btn-primary btn-lg btn-block">View Team</a>
             </div>
         </div>
         {% endfor %}
