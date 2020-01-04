@@ -315,7 +315,7 @@ def devlogentry(projectid):
         content = request.form['content']
         entry = Devlog(projectid=projectid, uid=uid, content=content)
         db.session.add(entry)
-        db.commit()
+        db.session.commit()
     else:
         return render_template(
             "new_devlog.html",
