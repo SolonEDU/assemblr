@@ -114,7 +114,7 @@ def register():
         newuser = User(firstname=firstname, lastname=lastname, email=email, password=password, age=age, city=city, bio=bio)
         db.session.add(newuser)
         db.session.commit()
-        flash("Successfuly created user", "success")
+        flash("Successfully created user", "success")
         return redirect(url_for('login'))
 
 #logs out user by deleting info from the session
@@ -125,14 +125,13 @@ def logout():
     else:
         session.pop('uid')
         session.pop('email')
-        flash("Successfuly logged out", "success")
+        flash("Successfully logged out", "success")
     return redirect(url_for('root')) # should redirect back to login page
 
 @app.route("/home")
 @login_required
 def home():
-    # uid = session['uid']
-    uid = 0 # replace uid lata
+    uid = session['uid'] 
     teams = Member.query.filter_by(uid=uid).all() 
     teamsData = {}
     for team in teams:
