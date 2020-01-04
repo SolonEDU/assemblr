@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block style %}
+{% block scroll %}
 <html style="overflow-y:scroll">
 {% endblock %}
 
@@ -69,7 +69,27 @@
             </div>
             <br>
             <br>
-            <div class="font-weight-bold" style="float: none">Skills</div>
+            <div class="font-weight-bold">Skills</div>
+            <div style="float: left;">
+                <div class="custom-control custom-checkbox mr-sm-2">
+                    <input type="checkbox" class="custom-control-input" id="frontend">
+                    <label class="custom-control-label" for="frontend">Frontend</label>
+                </div>
+                <div class="custom-control custom-checkbox mr-sm-2">
+                    <input type="checkbox" class="custom-control-input" id="backend">
+                    <label class="custom-control-label" for="backend">Backend</label>
+                </div>
+            </div>
+            <div style="float: right;">
+                <div class="custom-control custom-checkbox mr-sm-2">
+                    <input type="checkbox" class="custom-control-input" id="design">
+                    <label class="custom-control-label" for="design">Design</label >
+                </div>
+                <div class="custom-control custom-checkbox mr-sm-2">
+                    <input type="checkbox" class="custom-control-input" id="projectmanager">
+                    <label class="custom-control-label" for="projectmanager">Project Manager</label>
+                </div>
+            </div>
             <div class="form-group" style="float:left">
                 <label for="password" class="font-weight-bold">Password</label>
                 <input name="password" type="password" class="form-control" id="password" required>
