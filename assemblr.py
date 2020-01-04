@@ -169,19 +169,23 @@ def network():
     )
 
 
-@app.route("/my_people")
+@app.route("/find")
 @login_required
-def my_people():
+def find():
+    uid = session['uid']
+    userids = User.query.with_entities(User.uid).all()
+    friendids = Friend.query.filter_by(uid=uid).with_entities(Friend.friend).all()
+    ids = []
+    for id in userids:
+        if id not in friendids:
+            ids.append(id)
+    users = []
+    for id in ids:
+        user = User.query.filter_by(uid=id).first()
+        users.append(user)
     return render_template(
-        "my_people.html"
-    )
-
-
-@app.route("/other_people")
-@login_required
-def other_people():
-    return render_template(
-        "other_people.html"
+        "find.html",
+        users=users
     )
 
 
