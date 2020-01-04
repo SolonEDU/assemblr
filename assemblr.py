@@ -213,17 +213,36 @@ def new_project():
 @app.route("/new_team", methods=['GET', 'POST'])
 @login_required
 def new_team():
-    uid = session['uid']
-    friendids = Friend.query.filter_by(uid=uid).all()
-    friends = []
-    for friendid in friendids:
-        friend = User.query.filter_by(uid=friendid.friend).first()
-        print(friend)
-        friends.append(friend)
-    return render_template(
-        "new_team.html",
-        friends = friends
-    )
+    if request.method == 'POST':
+        newTeamMemberList = request.form.getlist('members')
+        newTeamMemberList = [ int(x) for x in newTeamMemberList ]
+        newTeamMemberList.append(session['uid'])
+        print(newTeamMemberList)
+        newTeamName = request.form['teamname']
+        newTeam = Team(teamname = newTeamName)
+        db.session.add(newTeam)
+        db.session.commit()
+        newTeamRecord = Team.query.filter_by(teamname=newTeamName).first()
+        newTeamId = newTeamRecord.id
+        for member in newTeamMemberList:
+            newMember = Member(teamid=newTeamId, uid=member)
+            db.session.add(newMember)
+            db.session.commit()
+        return redirect(url_for('team', teamid = newTeamId))
+        # for newTeamMember in newTeamMemberList:
+        #     newmember = Member(teamid)
+    else:    
+        uid = session['uid']
+        friendids = Friend.query.filter_by(uid=uid).all()
+        friends = []
+        for friendid in friendids:
+            friend = User.query.filter_by(uid=friendid.friend).first()
+            print(friend)
+            friends.append(friend)
+        return render_template(
+            "new_team.html",
+            friends = friends
+        )
 
 
 @app.route("/profile/<uid>")
@@ -238,6 +257,8 @@ def profile(uid):
 @app.route("/team/<teamid>")
 @login_required
 def team(teamid):
+    # print(teamid)
+    teamid = int(teamid)
     teamName = Team.query.filter_by(id=teamid).first().teamname
     members = Member.query.filter_by(teamid=teamid).all()
     memberUsers = []
