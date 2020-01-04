@@ -242,7 +242,7 @@ def new_team():
         return redirect(url_for('team', teamid = newTeamId))
         # for newTeamMember in newTeamMemberList:
         #     newmember = Member(teamid)
-    else:    
+    else:
         uid = session['uid']
         friendids = Friend.query.filter_by(uid=uid).all()
         friends = []
@@ -306,15 +306,21 @@ def project(projectid):
         devlog = devlog
     )
 
-@app.route("/devlogentry/<projectid>", methods=['POST'])
+@app.route("/devlogentry/<projectid>", methods=['GET','POST'])
 @login_required
 def devlogentry(projectid):
-    uid = session['uid']
-    content = request.form['content']
     projectid = int(projectid)
-    entry = Devlog(projectid=projectid, uid=uid, content=content)
-    db.session.add(entry)
-    db.commit()
+    if request.method == 'POST':
+        uid = session['uid']
+        content = request.form['content']
+        entry = Devlog(projectid=projectid, uid=uid, content=content)
+        db.session.add(entry)
+        db.commit()
+    else:
+        return render_template(
+            "new_devlog.html",
+            projectid = projectid,
+            )
 
 if __name__ == "__main__":
     db.init_app(app)

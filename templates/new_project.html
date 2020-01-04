@@ -8,11 +8,6 @@
     Create Project
 {% endblock %}
 
-{% block navItems %}
-<th><a href="/network">Network</a></th>
-<th><a href="/find">Find</a></th>
-{% endblock %}
-
 {% block body %}
 <div id="landing">
     <form class="p-5 bg-light text-dark text-center" action="/new_project/{{ teamid }}" method="POST">
