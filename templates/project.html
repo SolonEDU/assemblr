@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Project
+{% endblock %}
+
+{% block navItems %}
+<th><a href="/network">Network</a></th>
+<th><a href="/find">Find</a></th>
+{% endblock %}
+
+{% block body %}
+<div class="mt-4">
+    <div class="container p-5 bg-light text-dark" style="width: 100rem;">
+        <h1>Project: {{project.projectname}}</h1>
+        <hr>
+        <h3>Repository: <a href="{{project.repo}}" class="btn-link">{{project.repo}}</a></h3>
+        <br>
+        <h3>By: {{team.teamname}}</h3>
+        {% for user in members %}
+        <div class="list-group">
+            <a href="/profile/{{user.uid}}" class="list-group-item list-group-item-action">
+                {{user.firstname}} {{user.lastname}}
+            </a>
+        </div>
+        {% endfor %}
+        <br>
+        <h3>Description:</h3>
+        <div class="card">{{project.description}}</div>
+    </div>
+    <br>
+    <div class="container p-5 bg-light text-dark" style="width: 100rem;">
+        <h2>Devlog Updates:</h2>
+        <hr>
+        {% for entry,user in devlog %}
+        <div class="card">
+            <div class="card-header">{{entry.timestamp.strftime('%Y-%m-%d')}}</div>
+            <div class="card-body">
+                <div class="card-title">By: {{user.firstname}} {{user.lastname}}</div>
+                <div class="card-text">{{entry.content}}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

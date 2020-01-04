@@ -268,7 +268,6 @@ def profile(uid):
 @app.route("/team/<teamid>")
 @login_required
 def team(teamid):
-    # print(teamid)
     teamid = int(teamid)
     teamObject = Team.query.filter_by(id=teamid).first()
     members = Member.query.filter_by(teamid=teamid).all()
@@ -295,7 +294,10 @@ def project(projectid):
     for user in users:
         member = User.query.filter_by(uid=user.id).first()
         members.append(member)
-    devlog = Devlog.query.filter_by(projectid=projectid).order_by(Devlog.timestamp.desc())
+    entries = Devlog.query.filter_by(projectid=projectid).order_by(Devlog.timestamp.desc())
+    devlog = {}
+    for entry in entries:
+        devlog[entry] = User.query.filter_by(uid=entry.uid).first()
     return render_template(
         "project.html",
         project = project,
@@ -303,6 +305,16 @@ def project(projectid):
         members = members,
         devlog = devlog
     )
+
+@app.route("/devlogentry/<projectid>", methods=['POST'])
+@login_required
+def devlogentry(projectid):
+    uid = session['uid']
+    content = request.form['content']
+    projectid = int(projectid)
+    entry = Devlog(projectid=projectid, uid=uid, content=content)
+    db.session.add(entry)
+    db.commit()
 
 if __name__ == "__main__":
     db.init_app(app)
