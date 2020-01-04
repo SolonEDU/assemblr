@@ -10,38 +10,8 @@
 
 {% block body %}
 <div class="container-fluid mt-5">
+    <a href="/new_team" class="btn btn-primary btn-lg btn-block">Create new team</a>
     <div class="row">
-        <div class="col-md-2 mb-5">
-            <a href="/new_team" class="btn btn-primary btn-lg btn-block">
-                <br><br><br>
-                Create a new team
-                <br><br><br><br>
-            </a>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <h3 class="card-header">Solon</h3>
-                <div class="card-body">
-                    <h4>Members:</h4>
-                    <div class="list-group">
-                        <a href="/profile/0" class="list-group-item list-group-item-action">
-                            Matthew Chan
-                        </a>
-                        <a href="/profile/1" class="list-group-item list-group-item-action">
-                            Kazi Jamal
-                        </a>
-                        <a href="/profile/2" class="list-group-item list-group-item-action">
-                            Eric Lau
-                        </a>
-                        <a href="/profile/3" class="list-group-item list-group-item-action">
-                            Raymond Lee
-                        </a>
-                    </div>
-                    <br>
-                    <a href="/team/0" class="btn btn-primary btn-lg btn-block">View Team</a>
-                </div>
-            </div>
-        </div>
         {% for team,users in teams.items() %}
         <div class="col-md-4 mb-5">
             <div class="card">

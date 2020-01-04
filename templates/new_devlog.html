@@ -15,7 +15,7 @@
 
 {% block body %}
 <div id="landing">
-    <form class="p-5 bg-light text-dark text-center" action="/new_devlog/{{ projectid }}" method="POST">
+    <form class="p-5 bg-light text-dark text-center" action="/devlogentry/{{ projectid }}" method="POST">
         <div class="form-group">
             <label for="content" class="font-weight-bold">Post</label>
             <textarea name="content" type="text" class="form-control" id="content" required></textarea>
