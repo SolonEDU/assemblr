@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% block style %}
+{% block scroll %}
 <html style="overflow-y:hidden">
 {% endblock %}
 
@@ -26,8 +26,8 @@
                     <table>
                         {% block navItems %}
                         {% endblock %}
-                        <th><a href="./profile/{{ session['username'] }}">account</a></th>
-                        <th><a href="./logout">logout</a></th>
+                        <th><a href="./profile/{{ session['uid'] }}">Account</a></th>
+                        <th><a href="./logout">Logout</a></th>
                     </table>
                 </div>
             </nav>
