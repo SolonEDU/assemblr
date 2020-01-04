@@ -39,21 +39,21 @@ class Message(db.Model):
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-class Role(db.Model):
-    uid = db.Column(db.Integer, primary_key=True)
-    projectmanager = db.Column(db.Boolean, nullable=False)
-    frontend = db.Column(db.Boolean, nullable=False)
-    backend = db.Column(db.Boolean, nullable=False)
-    design = db.Column(db.Boolean, nullable=False)
+# class Role(db.Model):
+#     uid = db.Column(db.Integer, primary_key=True)
+#     projectmanager = db.Column(db.Boolean, nullable=False)
+#     frontend = db.Column(db.Boolean, nullable=False)
+#     backend = db.Column(db.Boolean, nullable=False)
+#     design = db.Column(db.Boolean, nullable=False)
 
-class Technology(db.Model):
-    uid = db.Column(db.Integer, primary_key=True)
-    git = db.Column(db.Boolean, nullable=False)
-    html = db.Column(db.Boolean, nullable=False)
-    css = db.Column(db.Boolean, nullable=False)
-    python = db.Column(db.Boolean, nullable=False)
-    javascript = db.Column(db.Boolean, nullable=False)
-    sql = db.Column(db.Boolean, nullable=False)
+# class Technology(db.Model):
+#     uid = db.Column(db.Integer, primary_key=True)
+#     git = db.Column(db.Boolean, nullable=False)
+#     html = db.Column(db.Boolean, nullable=False)
+#     css = db.Column(db.Boolean, nullable=False)
+#     python = db.Column(db.Boolean, nullable=False)
+#     javascript = db.Column(db.Boolean, nullable=False)
+#     sql = db.Column(db.Boolean, nullable=False)
 
 class Member(db.Model):
     id = db.Column(db.Integer, primary_key=True)

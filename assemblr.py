@@ -8,8 +8,8 @@ User = models.User
 Request = models.Request
 Friend = models.Friend
 Message = models.Message
-Role = models.Role
-Technology = models.Technology
+# Role = models.Role
+# Technology = models.Technology
 Member = models.Member
 Team = models.Team
 Project = models.Project
@@ -137,15 +137,15 @@ def home():
     for team in teams:
         membersUserArr = []
         teamid = team.teamid
-        print(teamid)
+        # print(teamid)
         teamObject = Team.query.filter_by(id=teamid).first()
         members = Member.query.filter_by(teamid=teamid).all()
         for member in members:
             memberUser = User.query.filter_by(uid=member.uid).first()
-            print(memberUser.firstname)
+            # print(memberUser.firstname)
             membersUserArr.append(memberUser)
-        print(teamObject.teamname)
-        print(members)
+        # print(teamObject.teamname)
+        # print(members)
         teamsData[teamObject] = membersUserArr
     return render_template(
         "home.html",
@@ -193,11 +193,13 @@ def new_team():
     )
 
 
-@app.route("/profile")
+@app.route("/profile/<uid>")
 @login_required
 def profile():
+    user = User.query.filter_by(uid=uid).first()
     return render_template(
-        "profile.html"
+        "profile.html", 
+        user=user
     )
 
 
@@ -209,11 +211,22 @@ def project():
     )
 
 
-@app.route("/team")
+@app.route("/team/<teamid>")
 @login_required
-def team():
+def team(teamid):
+    print(teamid)
+    teamName = Team.query.filter_by(id=teamid).first().teamname
+    print(teamName)
+    members = Member.query.filter_by(teamid=teamid).all()
+    memberUsers = []
+    for member in members:
+        user = User.query.filter_by(uid=member.uid).first()
+        print(user.firstname)
+        memberUsers.append(user)
     return render_template(
-        "team.html"
+        "team.html",
+        teamName = teamName,
+        members = memberUsers
     )
 
 if __name__ == "__main__":
