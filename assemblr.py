@@ -195,6 +195,15 @@ def find():
         users=users
     )
 
+@app.route("/addfriend", methods=['POST'])
+@login_required
+def addfriend():
+    uid = session['uid']
+    friendid = request.form['friendid']
+    newfriend = Friend(uid=uid, friend=friendid)
+    db.session.add(newfriend)
+    db.session.commit()
+    return redirect(url_for('find'))
 
 @app.route("/new_project")
 @login_required
