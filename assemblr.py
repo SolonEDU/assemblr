@@ -127,7 +127,7 @@ def logout():
     else:
         session.pop('uid')
         session.pop('email')
-        flash("Successfully logged out", "success")
+        #flash("Successfully logged out", "success")
     return redirect(url_for('root')) # should redirect back to login page
 
 @app.route("/home")
@@ -202,7 +202,7 @@ def addfriend():
     db.session.commit()
     return redirect(url_for('find'))
 
-@app.route("/new_project/<teamid>")
+@app.route("/new_project/<teamid>", methods=['GET', 'POST'])
 @login_required
 def new_project(teamid):
     if request.method == 'POST':
@@ -211,7 +211,7 @@ def new_project(teamid):
         newProjectRepo = request.form['repo']
         newProject = Project(projectname = newProjectName, description = newProjectDescription, teamid = teamid, repo = newProjectRepo)
         db.session.add(newProject)
-        db.commit()
+        db.session.commit()
         newProjectRecord = Project.query.filter_by(projectname = newProjectName).first()
         newProjectId = newProjectRecord.id
         return redirect(url_for('project', projectid = newProjectId))
