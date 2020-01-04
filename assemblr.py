@@ -211,7 +211,7 @@ def new_project(teamid):
         newProjectRepo = request.form['repo']
         newProject = Project(projectname = newProjectName, description = newProjectDescription, teamid = teamid, repo = newProjectRepo)
         db.session.add(newProject)
-        db.commit()
+        db.session.commit()
         newProjectRecord = Project.query.filter_by(projectname = newProjectName).first()
         newProjectId = newProjectRecord.id
         return redirect(url_for('project', projectid = newProjectId))
