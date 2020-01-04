@@ -5,7 +5,17 @@ from config import Config
 from utl import models
 db = models.db
 User = models.User
-import sqlite3, os, random
+Request = models.Request
+Friend = models.Friend
+Message = models.Message
+Role = models.Role
+Technology = models.Technology
+Member = models.Member
+Team = models.Team
+Project = models.Project
+import sqlite3
+import os
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -121,8 +131,26 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
+    # uid = session['uid']
+    uid = 0 # replace uid lata
+    teams = Member.query.filter_by(uid=uid).all() 
+    teamsData = {}
+    for team in teams:
+        membersUserArr = []
+        teamid = team.teamid
+        print(teamid)
+        teamObject = Team.query.filter_by(id=teamid).first()
+        members = Member.query.filter_by(teamid=teamid).all()
+        for member in members:
+            memberUser = User.query.filter_by(uid=member.uid).first()
+            print(memberUser.firstname)
+            membersUserArr.append(memberUser)
+        print(teamObject.teamname)
+        print(members)
+        teamsData[teamObject] = membersUserArr
     return render_template(
-        "home.html"
+        "home.html",
+        teams=teamsData
     )
 
 
