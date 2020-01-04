@@ -93,6 +93,7 @@ def register():
     firstname = request.form['firstname']
     lastname = request.form['lastname']
     email = request.form['email']
+    github = request.form['github']
     password = request.form['password']
     password2 = request.form['password2']
     age = int(request.form['age'])
@@ -111,7 +112,7 @@ def register():
         return redirect(url_for('signup'))
     #successfully add user to database
     else:
-        newuser = User(firstname=firstname, lastname=lastname, email=email, password=password, age=age, city=city, bio=bio)
+        newuser = User(firstname=firstname, lastname=lastname, email=email, github=github, password=password, age=age, city=city, bio=bio)
         db.session.add(newuser)
         db.session.commit()
         flash("Successfully created user", "success")
@@ -156,29 +157,35 @@ def home():
 @app.route("/network")
 @login_required
 def network():
-    user = session['uid']
+    uid = session['uid']
     friendids = Friend.query.filter_by(uid=uid).all()
     friends = []
-    for id in friendids:
-        friends.append(User.query.filter_by(uid=id).first())
+    for friendid in friendids:
+        friend = User.query.filter_by(uid=friendid.friend).first()
+        print(friend)
+        friends.append(friend)
     return render_template(
         "network.html", friends=friends
     )
 
 
-@app.route("/my_people")
+@app.route("/find")
 @login_required
-def my_people():
+def find():
+    uid = session['uid']
+    userids = User.query.with_entities(User.uid).all()
+    friendids = Friend.query.filter_by(uid=uid).with_entities(Friend.friend).all()
+    ids = []
+    for id in userids:
+        if id not in friendids:
+            ids.append(id)
+    users = []
+    for id in ids:
+        user = User.query.filter_by(uid=id).first()
+        users.append(user)
     return render_template(
-        "my_people.html"
-    )
-
-
-@app.route("/other_people")
-@login_required
-def other_people():
-    return render_template(
-        "other_people.html"
+        "find.html",
+        users=users
     )
 
 
@@ -190,17 +197,25 @@ def new_project():
     )
 
 
-@app.route("/new_team")
+@app.route("/new_team", methods=['GET', 'POST'])
 @login_required
 def new_team():
+    uid = session['uid']
+    friendids = Friend.query.filter_by(uid=uid).all()
+    friends = []
+    for friendid in friendids:
+        friend = User.query.filter_by(uid=friendid.friend).first()
+        print(friend)
+        friends.append(friend)
     return render_template(
-        "new_team.html"
+        "new_team.html",
+        friends = friends
     )
 
 
 @app.route("/profile/<uid>")
 @login_required
-def profile():
+def profile(uid):
     user = User.query.filter_by(uid=uid).first()
     return render_template(
         "profile.html",
