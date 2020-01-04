@@ -286,7 +286,7 @@ def project(projectid):
         "project.html",
         project = project,
         team = team,
-        members = 
+        members = members
     )
 
 if __name__ == "__main__":
