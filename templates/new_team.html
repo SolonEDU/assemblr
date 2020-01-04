@@ -19,6 +19,12 @@
             <label for="teamname" class="font-weight-bold">Team Name</label>
             <input name="teamname" type="text" class="form-control" id="teamname" required>
         </div>
+        {% for friend in friends %}
+        <div class="custom-control custom-checkbox mr-sm-2">
+            <input type="checkbox" class="custom-control-input" id="{{ friend.uid }}">
+            <label class="custom-control-label" for="{{ friend.uid }} ">{{ friend.firstname }} {{ friend.lastname }} </label>
+        </div>
+        {% endfor %}
         <button type="submit" class="btn btn-success">Create Team</button>
     </form>
 </div>
