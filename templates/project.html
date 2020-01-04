@@ -25,7 +25,7 @@
         <a href="/devlogentry/{{project.id}}" class="btn btn-primary"> Create new devlog </a>
         <h2>Devlog Updates:</h2>
         <hr>
-        {% for entry,user in devlog %}
+        {% for entry,user in devlog.items() %}
         <div class="card">
             <div class="card-header">{{entry.timestamp.strftime('%Y-%m-%d')}}</div>
             <div class="card-body">

@@ -316,7 +316,7 @@ def devlogentry(projectid):
         entry = Devlog(projectid=projectid, uid=uid, content=content)
         db.session.add(entry)
         db.session.commit()
-        return redirect(url_for('project'), projectid)
+        return redirect(url_for('project',projectid= projectid))
     else:
         return render_template(
             "new_devlog.html",
