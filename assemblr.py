@@ -156,8 +156,13 @@ def home():
 @app.route("/network")
 @login_required
 def network():
+    user = session['uid']
+    friendids = Friend.query.filter_by(uid=uid).all()
+    friends = []
+    for id in friendids:
+        friends.append(User.query.filter_by(uid=id).first())
     return render_template(
-        "network.html"
+        "network.html", friends=friends
     )
 
 
