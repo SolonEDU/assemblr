@@ -138,15 +138,11 @@ def home():
     for team in teams:
         membersUserArr = []
         teamid = team.teamid
-        # print(teamid)
         teamObject = Team.query.filter_by(id=teamid).first()
         members = Member.query.filter_by(teamid=teamid).all()
         for member in members:
             memberUser = User.query.filter_by(uid=member.uid).first()
-            # print(memberUser.firstname)
             membersUserArr.append(memberUser)
-        # print(teamObject.teamname)
-        # print(members)
         teamsData[teamObject] = membersUserArr
     return render_template(
         "home.html",
@@ -216,17 +212,36 @@ def new_project():
 @app.route("/new_team", methods=['GET', 'POST'])
 @login_required
 def new_team():
-    uid = session['uid']
-    friendids = Friend.query.filter_by(uid=uid).all()
-    friends = []
-    for friendid in friendids:
-        friend = User.query.filter_by(uid=friendid.friend).first()
-        print(friend)
-        friends.append(friend)
-    return render_template(
-        "new_team.html",
-        friends = friends
-    )
+    if request.method == 'POST':
+        newTeamMemberList = request.form.getlist('members')
+        newTeamMemberList = [ int(x) for x in newTeamMemberList ]
+        newTeamMemberList.append(session['uid'])
+        print(newTeamMemberList)
+        newTeamName = request.form['teamname']
+        newTeam = Team(teamname = newTeamName)
+        db.session.add(newTeam)
+        db.session.commit()
+        newTeamRecord = Team.query.filter_by(teamname=newTeamName).first()
+        newTeamId = newTeamRecord.id
+        for member in newTeamMemberList:
+            newMember = Member(teamid=newTeamId, uid=member)
+            db.session.add(newMember)
+            db.session.commit()
+        return redirect(url_for('team', teamid = newTeamId))
+        # for newTeamMember in newTeamMemberList:
+        #     newmember = Member(teamid)
+    else:    
+        uid = session['uid']
+        friendids = Friend.query.filter_by(uid=uid).all()
+        friends = []
+        for friendid in friendids:
+            friend = User.query.filter_by(uid=friendid.friend).first()
+            print(friend)
+            friends.append(friend)
+        return render_template(
+            "new_team.html",
+            friends = friends
+        )
 
 
 @app.route("/profile/<uid>")
@@ -238,31 +253,40 @@ def profile(uid):
         user=user
     )
 
-
-@app.route("/project")
-@login_required
-def project():
-    return render_template(
-        "project.html"
-    )
-
-
 @app.route("/team/<teamid>")
 @login_required
 def team(teamid):
     # print(teamid)
+    teamid = int(teamid)
     teamName = Team.query.filter_by(id=teamid).first().teamname
-    # print(teamName)
     members = Member.query.filter_by(teamid=teamid).all()
     memberUsers = []
     for member in members:
         user = User.query.filter_by(uid=member.uid).first()
-        # print(user.firstname)
         memberUsers.append(user)
+    projects = Project.query.filter_by(teamid=teamid).all()
     return render_template(
         "team.html",
         teamName = teamName,
-        members = memberUsers
+        members = memberUsers,
+        projects = projects
+    )
+
+@app.route("/project/<projectid>")
+@login_required
+def project(projectid):
+    project = Project.query.filter_by(id=projectid).first()
+    team = Team.query.filter_by(id=project.teamid).first()
+    users = Member.query.filter_by(teamid=team.id).all()
+    members = []
+    for user in users:
+        member = User.query.filter_by(uid=user.id).first()
+        members.append(member)
+    return render_template(
+        "project.html",
+        project = project,
+        team = team,
+        members = 
     )
 
 if __name__ == "__main__":
