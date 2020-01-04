@@ -294,12 +294,12 @@ def project(projectid):
         devlog = devlog
     )
 
-@app.route("/devlogentry", methods=['POST'])
+@app.route("/devlogentry/<projectid>", methods=['POST'])
 @login_required
-def devlogentry():
+def devlogentry(projectid):
     uid = session['uid']
-    projectid = request.form['projectid']
     content = request.form['content']
+    projectid = int(projectid)
     entry = Devlog(projectid=projectid, uid=uid, content=content)
     db.session.add(entry)
     db.commit()
