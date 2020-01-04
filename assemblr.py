@@ -202,7 +202,7 @@ def addfriend():
     db.session.commit()
     return redirect(url_for('find'))
 
-@app.route("/new_project/<teamid>")
+@app.route("/new_project/<teamid>", methods=['GET', 'POST'])
 @login_required
 def new_project(teamid):
     if request.method == 'POST':
