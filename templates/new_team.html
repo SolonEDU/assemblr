@@ -21,8 +21,8 @@
         </div>
         {% for friend in friends %}
         <div class="custom-control custom-checkbox mr-sm-2">
-            <input type="checkbox" class="custom-control-input" id="{{ friend.uid }}">
-            <label class="custom-control-label" for="{{ friend.uid }} ">{{ friend.firstname }} {{ friend.lastname }} </label>
+            <input type="checkbox" name="members" class="custom-control-input" value="{{ friend.uid }}" id="{{ friend.uid }}">
+            <label class="custom-control-label" for="{{ friend.uid }}">{{ friend.firstname }} {{ friend.lastname }} </label>
         </div>
         {% endfor %}
         <button type="submit" class="btn btn-success">Create Team</button>
