@@ -216,17 +216,24 @@ def new_project():
 @app.route("/new_team", methods=['GET', 'POST'])
 @login_required
 def new_team():
-    uid = session['uid']
-    friendids = Friend.query.filter_by(uid=uid).all()
-    friends = []
-    for friendid in friendids:
-        friend = User.query.filter_by(uid=friendid.friend).first()
-        print(friend)
-        friends.append(friend)
-    return render_template(
-        "new_team.html",
-        friends = friends
-    )
+    if request.method == 'POST':
+        newTeamMemberList = request.form.getlist('members')
+        newTeamMemberList = [ int(x) for x in newTeamMemberList ]
+        print(newTeamMemberList)
+        # for newTeamMember in newTeamMemberList:
+        #     newmember = Member(teamid)
+    else:    
+        uid = session['uid']
+        friendids = Friend.query.filter_by(uid=uid).all()
+        friends = []
+        for friendid in friendids:
+            friend = User.query.filter_by(uid=friendid.friend).first()
+            print(friend)
+            friends.append(friend)
+        return render_template(
+            "new_team.html",
+            friends = friends
+        )
 
 
 @app.route("/profile/<uid>")
