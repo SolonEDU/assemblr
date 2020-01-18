@@ -2,6 +2,7 @@ import urllib.parse
 import urllib.request
 import os
 import sqlite3
+import json
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
@@ -25,6 +26,62 @@ app.config.from_object(Config)
 
 # creates secret key for sessions
 app.secret_key = os.urandom(32)
+
+api_file = f"{os.path.dirname(os.path.abspath(__file__))}/api.json"
+
+with open(api_file, 'r') as read_file:
+    keys = json.load(read_file)
+
+GITHUB_CLIENT_ID = keys['GITHUB_CLIENT_ID']
+GITHUB_CLIENT_SECRET = keys['GITHUB_CLIENT_SECRET']
+
+GITHUB_OAUTH_ROUTE = 'https://github.com/login/oauth/authorize'
+GITHUB_OAUTH_REDIRECT = 'http://localhost:5000/callback'
+GITHUB_API_ROUTE = 'https://api.github.com/graphql'
+GITHUB_TOKEN_URL = 'https://github.com/login/oauth/access_token'
+
+
+@app.route('/connect_to_github')
+def connect_to_github():
+    github_auth_parameters = {
+        'client_id': GITHUB_CLIENT_ID,
+        'redirect_uri': GITHUB_OAUTH_REDIRECT,
+        'scope': '',
+    }
+    github_auth_parameters = "&".join(
+        [f"{key}={value}" for key, value in github_auth_parameters.items()])
+    github_auth_url = f"{GITHUB_OAUTH_ROUTE}?{github_auth_parameters}"
+
+    return redirect(github_auth_url)
+
+
+@app.route('/callback')
+def callback():
+    auth_token = request.args['code']
+    code_payload = {
+        'client_id': GITHUB_CLIENT_ID,
+        'client_secret': GITHUB_CLIENT_SECRET,
+        'code': str(auth_token),
+        'redirect_uri': GITHUB_OAUTH_REDIRECT,
+    }
+
+    post_request = urllib.request.Request(
+        GITHUB_TOKEN_URL,
+        headers= {'Accept' : 'application/json'},
+        data=urllib.parse.urlencode(code_payload).encode()
+    )
+
+    post_request = urllib.request.urlopen(post_request)
+    post_request = post_request.read()
+
+    response_data = json.loads(post_request)
+    access_token = response_data['access_token']
+    scope = response_data['scope']
+    token_type = response_data['token_type']
+
+    session['access_token'] = access_token
+
+    return redirect(url_for('root'))
 
 
 def login_required(f):
