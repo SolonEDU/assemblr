@@ -1,73 +1,69 @@
+{% from "macro.html" import nav_item with context %}
+
 <!DOCTYPE html>
-{% block scroll %}
-<html style="overflow-y:hidden">
-{% endblock %}
+
+<html>
 
     <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
         <title>
-            {% block title %}{% endblock %} :: ASSEMBLR
+            {% block title %}{% endblock %} :: assemblr
         </title>
+
+        <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-            crossorigin="anonymous">
-        <link rel="stylesheet" href="../static/css/style.css">
-        <link rel="stylesheet" href="../static/css/nav.css">
-        <!-- <style>{% block style %}{% endblock %}</style> -->
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!-- jQuery, Popper.js, and Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
     </head>
 
-    <body {% block color %} style = "background-color: #FF5A5F;" {% endblock %}>
-        <div class="container-fluid m-auto">
-            {% block nav %}
-            <div style="margin-top: 20px; display: flex;">
-                <a href="/home" class="nav-content">ASSEMBLR</a>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark justify-content-left fixed-top mb-5">
+            <a class="navbar-brand" href="/">assemblr</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav">
+                    {{ nav_item('about', 'about') }}
+                    {{ nav_item('help', 'help') }}
+
+                    <!-- {% if session['access_token'] %}
+                    GitHub specific things
+                    {% endif %} -->
+                </ul>
+                <!-- <ul class="navbar-nav ml-auto">
+                    <li class="nav-item navbar-right">
+                        if connected to github
+                        show name
+                        else
+                        connect to github
+                    </li>
+                </ul> -->
             </div>
+        </nav>
 
-            <nav>
-                <div class="nav-content">
-                    <table>
-                        <th><a href="/network">Network</a></th>
-                        <th><a href="/find">Find</a></th>
-                        <th><a href="/profile/{{ session['uid'] }}">Account</a></th>
-                        <th><a href="/logout">Logout</a></th>
-                    </table>
-                </div>
-            </nav>
-            {% endblock %}
+        {% block body %}
+        {% endblock %}
 
-            <!-- {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            {% for category, message in messages %}
-            {% if category == "error" %}
-        <div class="alert alert-danger text-align-center alert-dismissible fade show" role="alert">
-            {% endif %}
-            {% if category == "success" %}
-            <div class="alert alert-success text-align-center alert-dismissible fade show" role="alert">
-                {% endif %}
-                {{message}}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {% endfor %}
-            {% endif %}
-            {% endwith %} -->
-
-            <center>
-            <p class="display-4">{% block display %}{% endblock %}</p>
-        </center>
-
-            {% block body %}
-            {% endblock %}
-
-            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-                crossorigin="anonymous"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-                crossorigin="anonymous"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-                crossorigin="anonymous"></script>
-        </div>
+        {% block script %}
+        {% endblock %}
     </body>
+
 </html>
