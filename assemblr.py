@@ -1,3 +1,7 @@
+import urllib.parse
+import urllib.request
+import os
+import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
@@ -14,18 +18,19 @@ Member = models.Member
 Team = models.Team
 Project = models.Project
 Devlog = models.Devlog
-import sqlite3
-import os
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-#creates secret key for sessions
+# creates secret key for sessions
 app.secret_key = os.urandom(32)
 
-#decorator that redirects user to login page if not logged in
+
 def login_required(f):
+    '''
+    decorator that redirects user to login page if not logged in
+    '''
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "uid" not in session:
@@ -33,6 +38,7 @@ def login_required(f):
             return redirect(url_for('root'))
         return f(*args, **kwargs)
     return decorated_function
+
 
 @app.route("/")
 def root():
@@ -53,9 +59,12 @@ def login():
             "login.html",
         )
 
-#authenticates user upon a login attempt
+
 @app.route("/auth", methods=["POST"])
 def auth():
+    '''
+    authenticates user upon a login attempt
+    '''
     if "uid" in session:
         flash("You were already logged in, "+session['email']+".", "error")
         return redirect(url_for('home'))
@@ -64,17 +73,19 @@ def auth():
     password = request.form['password']
     # looking for email & password from database
     user = User.query.filter_by(email=email).first()
-    if user == None: # if email not found
+    if user == None:  # if email not found
         flash("No user found with given email", "error")
         return redirect(url_for('login'))
-    elif password != user.password: # if password is incorrect
+    elif password != user.password:  # if password is incorrect
         flash("Incorrect password", "error")
         return redirect(url_for('login'))
-    else: # hooray! the email and password are both valid
+    else:  # hooray! the email and password are both valid
         session['uid'] = user.uid
         session['email'] = user.email
-        flash("Welcome " + email + ". You have been logged in successfully.", "success")
+        flash("Welcome " + email +
+              ". You have been logged in successfully.", "success")
         return redirect(url_for('home'))
+
 
 @app.route("/signup")
 def signup():
@@ -85,12 +96,15 @@ def signup():
             "register.html"
         )
 
-#creates a new user in the database if provided valid signup information
+
 @app.route("/register", methods=["POST"])
 def register():
+    '''
+    creates a new user in the database if provided valid signup information
+    '''
     if "uid" in session:
         return redirect(url_for('home'))
-    #gets user information from POST request
+    # gets user information from POST request
     firstname = request.form['firstname']
     lastname = request.form['lastname']
     email = request.form['email']
@@ -100,7 +114,7 @@ def register():
     age = int(request.form['age'])
     city = request.form['city']
     bio = request.form['bio']
-    #looking if user with email in database already exists
+    # looking if user with email in database already exists
     user = User.query.filter_by(email=email).first()
     if user != None:
         flash("Account with that email already exists", "error")
@@ -111,24 +125,29 @@ def register():
     elif len(password) < 8:
         flash("Password must be at least 8 characters in length", "error")
         return redirect(url_for('signup'))
-    #successfully add user to database
+    # successfully add user to database
     else:
-        newuser = User(firstname=firstname, lastname=lastname, email=email, github=github, password=password, age=age, city=city, bio=bio)
+        newuser = User(firstname=firstname, lastname=lastname, email=email,
+                       github=github, password=password, age=age, city=city, bio=bio)
         db.session.add(newuser)
         db.session.commit()
         flash("Successfully created user", "success")
         return redirect(url_for('login'))
 
-#logs out user by deleting info from the session
+
 @app.route("/logout")
 def logout():
+    '''
+    logs out user by deleting info from the session
+    '''
     if not "uid" in session:
         flash("Already logged out, no need to log out again", "error")
     else:
         session.pop('uid')
         session.pop('email')
         #flash("Successfully logged out", "success")
-    return redirect(url_for('root')) # should redirect back to login page
+    return redirect(url_for('root'))  # should redirect back to login page
+
 
 @app.route("/home")
 @login_required
@@ -192,6 +211,7 @@ def find():
         users=users
     )
 
+
 @app.route("/addfriend", methods=['POST'])
 @login_required
 def addfriend():
@@ -202,6 +222,7 @@ def addfriend():
     db.session.commit()
     return redirect(url_for('find'))
 
+
 @app.route("/new_project/<teamid>", methods=['GET', 'POST'])
 @login_required
 def new_project(teamid):
@@ -209,15 +230,17 @@ def new_project(teamid):
         newProjectName = request.form['projectname']
         newProjectDescription = request.form['description']
         newProjectRepo = request.form['repo']
-        newProject = Project(projectname = newProjectName, description = newProjectDescription, teamid = teamid, repo = newProjectRepo)
+        newProject = Project(projectname=newProjectName,
+                             description=newProjectDescription, teamid=teamid, repo=newProjectRepo)
         db.session.add(newProject)
         db.session.commit()
-        newProjectRecord = Project.query.filter_by(projectname = newProjectName).first()
+        newProjectRecord = Project.query.filter_by(
+            projectname=newProjectName).first()
         newProjectId = newProjectRecord.id
-        return redirect(url_for('project', projectid = newProjectId))
+        return redirect(url_for('project', projectid=newProjectId))
     return render_template(
         "new_project.html",
-        teamid = teamid
+        teamid=teamid
     )
 
 
@@ -226,11 +249,11 @@ def new_project(teamid):
 def new_team():
     if request.method == 'POST':
         newTeamMemberList = request.form.getlist('members')
-        newTeamMemberList = [ int(x) for x in newTeamMemberList ]
+        newTeamMemberList = [int(x) for x in newTeamMemberList]
         newTeamMemberList.append(session['uid'])
         print(newTeamMemberList)
         newTeamName = request.form['teamname']
-        newTeam = Team(teamname = newTeamName)
+        newTeam = Team(teamname=newTeamName)
         db.session.add(newTeam)
         db.session.commit()
         newTeamRecord = Team.query.filter_by(teamname=newTeamName).first()
@@ -239,7 +262,7 @@ def new_team():
             newMember = Member(teamid=newTeamId, uid=member)
             db.session.add(newMember)
             db.session.commit()
-        return redirect(url_for('team', teamid = newTeamId))
+        return redirect(url_for('team', teamid=newTeamId))
         # for newTeamMember in newTeamMemberList:
         #     newmember = Member(teamid)
     else:
@@ -252,7 +275,7 @@ def new_team():
             friends.append(friend)
         return render_template(
             "new_team.html",
-            friends = friends
+            friends=friends
         )
 
 
@@ -264,6 +287,7 @@ def profile(uid):
         "profile.html",
         user=user
     )
+
 
 @app.route("/team/<teamid>")
 @login_required
@@ -278,11 +302,12 @@ def team(teamid):
     projects = Project.query.filter_by(teamid=teamid).all()
     return render_template(
         "team.html",
-        team = teamObject,
-        members = memberUsers,
-        projects = projects,
-        teamid = teamid
+        team=teamObject,
+        members=memberUsers,
+        projects=projects,
+        teamid=teamid
     )
+
 
 @app.route("/project/<projectid>")
 @login_required
@@ -294,19 +319,21 @@ def project(projectid):
     for user in users:
         member = User.query.filter_by(uid=user.id).first()
         members.append(member)
-    entries = Devlog.query.filter_by(projectid=projectid).order_by(Devlog.timestamp.desc())
+    entries = Devlog.query.filter_by(
+        projectid=projectid).order_by(Devlog.timestamp.desc())
     devlog = {}
     for entry in entries:
         devlog[entry] = User.query.filter_by(uid=entry.uid).first()
     return render_template(
         "project.html",
-        project = project,
-        team = team,
-        members = members,
-        devlog = devlog
+        project=project,
+        team=team,
+        members=members,
+        devlog=devlog
     )
 
-@app.route("/devlogentry/<projectid>", methods=['GET','POST'])
+
+@app.route("/devlogentry/<projectid>", methods=['GET', 'POST'])
 @login_required
 def devlogentry(projectid):
     projectid = int(projectid)
@@ -316,16 +343,17 @@ def devlogentry(projectid):
         entry = Devlog(projectid=projectid, uid=uid, content=content)
         db.session.add(entry)
         db.session.commit()
-        return redirect(url_for('project',projectid= projectid))
+        return redirect(url_for('project', projectid=projectid))
     else:
         return render_template(
             "new_devlog.html",
-            projectid = projectid,
-            )
+            projectid=projectid,
+        )
+
 
 if __name__ == "__main__":
     db.init_app(app)
     with app.app_context():
         db.create_all()
     app.debug = True
-    app.run(host='0.0.0.0')
+    app.run()

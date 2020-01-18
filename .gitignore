@@ -127,4 +127,8 @@ ehthumbs.db
 **/*[\\/\:;*?!'"<>|$º•¶§∞¢£]*
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Database #
 site.db
+
+# Visual Studio Code #
+.vscode
