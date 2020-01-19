@@ -80,6 +80,18 @@ def callback():
     token_type = response_data['token_type']
 
     session['access_token'] = access_token
+    query = { 'query': "{ viewer { login } }" }
+    query = json.dumps(query).encode('utf8')
+    req = urllib.request.Request(
+        GITHUB_API_ROUTE,
+        data = query,
+        headers= {'Authorization': f"Bearer {session['access_token']}"},
+        method= 'POST'
+    )
+
+    req = urllib.request.urlopen(req)
+    res = req.read()
+    session['data'] = json.loads(res)['data']['viewer']['login']
 
     return redirect(url_for('root'))
 
