@@ -81,18 +81,17 @@ def callback():
 
     session['access_token'] = access_token
     query = { 'query':
-    """{
-        viewer
-            {
-                topRepositories(first: 10, orderBy: {direction: ASC, field: UPDATED_AT}) {
-                    edges {
-                        node {
-                            languages(first: 10, orderBy: {direction: ASC, field: SIZE}) {
-                                edges {
-                                    node {
-                                        color
-                                        name
-                                    }
+    """
+    {
+        viewer {
+            topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
+                edges {
+                    node {
+                        languages(first: 3, orderBy: {direction: ASC, field: SIZE}) {
+                            edges {
+                                node {
+                                    color
+                                    name
                                 }
                             }
                         }
@@ -100,6 +99,7 @@ def callback():
                 }
             }
         }
+    }
     """ }
     query = json.dumps(query).encode('utf8')
     req = urllib.request.Request(
@@ -111,14 +111,17 @@ def callback():
 
     req = urllib.request.urlopen(req)
     res = req.read()
-    # session['data'] = json.loads(res)['data']['viewer']['topRepositories']['edges']
-    languages = dict()
-    for data in json.loads(res)['data']['viewer']['topRepositories']['edges']:
-        for language in data['node']:
-            if not language['edges']['node']['name'] in languages:
-                languages[language['edges']['node']['name']] = language['edges']['node']['color']
 
-    session['languages'] = languages
+    user_languages = dict()
+
+    print(json.loads(res))
+
+    for edge in json.loads(res)['data']['viewer']['topRepositories']['edges']:
+        if not edge is None:
+            for language in edge['node']['languages']['edges']:
+                user_languages[language['node']['name']] = language['node']['color']
+
+    session['user_languages'] = user_languages
     return redirect(url_for('root'))
 
 
@@ -137,6 +140,9 @@ def login_required(f):
 
 @app.route("/")
 def root():
+    # return render_template(
+    #     'landing.html'
+    # )
     if "uid" in session:
         return redirect(url_for('home'))
     else:
