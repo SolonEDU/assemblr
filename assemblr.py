@@ -80,7 +80,27 @@ def callback():
     token_type = response_data['token_type']
 
     session['access_token'] = access_token
-    query = { 'query': "{ viewer { login } }" }
+    query = { 'query':
+    """{
+        viewer
+            {
+                topRepositories(first: 10, orderBy: {direction: ASC, field: UPDATED_AT}) {
+                    edges {
+                        node {
+                            languages(first: 10, orderBy: {direction: ASC, field: SIZE}) {
+                                edges {
+                                    node {
+                                        color
+                                        name
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    """ }
     query = json.dumps(query).encode('utf8')
     req = urllib.request.Request(
         GITHUB_API_ROUTE,
@@ -91,8 +111,14 @@ def callback():
 
     req = urllib.request.urlopen(req)
     res = req.read()
-    session['data'] = json.loads(res)['data']['viewer']['login']
+    # session['data'] = json.loads(res)['data']['viewer']['topRepositories']['edges']
+    languages = dict()
+    for data in json.loads(res)['data']['viewer']['topRepositories']['edges']:
+        for language in data['node']:
+            if not language['edges']['node']['name'] in languages:
+                languages[language['edges']['node']['name']] = language['edges']['node']['color']
 
+    session['languages'] = languages
     return redirect(url_for('root'))
 
 

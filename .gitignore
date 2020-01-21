@@ -132,3 +132,6 @@ site.db
 
 # Visual Studio Code #
 .vscode
+
+# API Keys #
+api.json
