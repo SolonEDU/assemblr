@@ -114,8 +114,6 @@ def callback():
     req = urllib.request.urlopen(req)
     res = req.read()
 
-    print(json.loads(res))
-
     session['login'] = json.loads(res)['data']['viewer']['login']
     session['name'] = json.loads(res)['data']['viewer']['name']
 

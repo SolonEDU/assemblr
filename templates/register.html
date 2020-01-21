@@ -6,7 +6,7 @@
 
 {% block body %}
 
-<div id="register" class="content container-fluid text-center m-auto">
+<div id="register" class="content container text-center m-auto px-5">
     <form action='/register' method='POST'>
         <div class="form-group row">
             <label for='displayname' class='font-weight-bold col-sm-2 text-left'>Name</label>
@@ -32,16 +32,44 @@
                 <input name="age" type="number" class="form-control" id="age" required>
             </div>
         </div>
-        <div class="row text-left p-3 m-2">
+        <div>
+            Your Languages
+            <br>
+            <span style="font-size: 11px;">(retrieved from repositories you've contributed to)</span>
+        </div>
+        <div class="row text-left px-3 pb-3 mx-2 mb-2">
             {% if session['user_languages'] %}
                 {% for key, val in session['user_languages'].items() %}
-                <div class="col-3 py-2">
-                    <span class="dot" style="background-color: {{ val }}"></span>
-                    {{ key }}
+                <div class="col-sm-6 col-md-4 col-lg-3 py-2 custom-control custom-checkbox">
+                    <input type="checkbox" name="language" class="custom-control-input" value="{{key}}" id="{{key}}" checked>
+                    <label class="custom-control-label" for="{{key}}">
+                        <span class="dot" style="background-color: {{ val }}"></span>
+                        {{ key }}
+                    </label>
                 </div>
                 {% endfor %}
             {% endif %}
         </div>
+        <div class="input-group mb-2">
+            <select class="custom-select" id="languageselect">
+              <option selected label="Add other languages you know"></option>
+              <!-- DUMMY LANGUAGES  -->
+              <!-- <option value="1">ABAP</option>
+              <option value="2">ABNF</option>
+              <option value="3">AMPL</option>
+              <option value="4">ANTLR</option>
+              <option value="5">APL</option>
+              <option value="6">ATS</option>
+              <option value="7">ActionScript</option>
+              <option value="8">Ada</option>
+              <option value="9">Agda</option>
+              <option value="10">AngelScript</option>
+              <option value="11">Apex</option> -->
+            </select>
+            <div class="input-group-append mb-2">
+              <button class="btn btn-dark" type="button">Add Language</button>
+            </div>
+          </div>
         <div class="form-group row">
             <label for="password" class="font-weight-bold col-sm-2 text-left">Password</label>
             <div class="col-sm-10">
@@ -54,7 +82,7 @@
                 <input name="password2" type="password" class="form-control" id="password2" required>
             </div>
         </div>
-        <button type='submit' class='btn btn-lg btn-dark'>Register</button>
+        <button type='submit' class='btn btn-lg btn-dark mb-5'>Register</button>
     </form>
 </div>
 {% endblock %}
