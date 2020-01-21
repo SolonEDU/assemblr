@@ -84,6 +84,8 @@ def callback():
     """
     {
         viewer {
+            name
+            login
             topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
                 edges {
                     node {
@@ -112,9 +114,18 @@ def callback():
     req = urllib.request.urlopen(req)
     res = req.read()
 
-    user_languages = dict()
-
     print(json.loads(res))
+
+    session['login'] = json.loads(res)['data']['viewer']['login']
+    session['name'] = json.loads(res)['data']['viewer']['name']
+
+    # if session['login'] is in users table:
+    #     go to home page
+
+    # if session['login'] is not in users table:
+        # get languages and redirect to registration page
+
+    user_languages = dict()
 
     for edge in json.loads(res)['data']['viewer']['topRepositories']['edges']:
         if not edge is None:
@@ -122,7 +133,8 @@ def callback():
                 user_languages[language['node']['name']] = language['node']['color']
 
     session['user_languages'] = user_languages
-    return redirect(url_for('root'))
+    return redirect(url_for('register'))
+    # return redirect(url_for('root'))
 
 
 def login_required(f):
@@ -201,53 +213,63 @@ def auth():
               ". You have been logged in successfully.", "success")
         return redirect(url_for('home'))
 
-
-@app.route("/signup")
-def signup():
-    if "uid" in session:
-        return redirect(url_for('home'))
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template(
+            'register.html'
+        )
     else:
         return render_template(
-            "register.html"
+            'register.html'
         )
 
+# @app.route("/signup")
+# def signup():
+#     if "uid" in session:
+#         return redirect(url_for('home'))
+#     else:
+#         return render_template(
+#             "register.html"
+#         )
 
-@app.route("/register", methods=["POST"])
-def register():
-    '''
-    creates a new user in the database if provided valid signup information
-    '''
-    if "uid" in session:
-        return redirect(url_for('home'))
-    # gets user information from POST request
-    firstname = request.form['firstname']
-    lastname = request.form['lastname']
-    email = request.form['email']
-    github = request.form['github']
-    password = request.form['password']
-    password2 = request.form['password2']
-    age = int(request.form['age'])
-    city = request.form['city']
-    bio = request.form['bio']
-    # looking if user with email in database already exists
-    user = User.query.filter_by(email=email).first()
-    if user != None:
-        flash("Account with that email already exists", "error")
-        return redirect(url_for('signup'))
-    elif password != password2:
-        flash("Passwords do not match", "error")
-        return redirect(url_for('signup'))
-    elif len(password) < 8:
-        flash("Password must be at least 8 characters in length", "error")
-        return redirect(url_for('signup'))
-    # successfully add user to database
-    else:
-        newuser = User(firstname=firstname, lastname=lastname, email=email,
-                       github=github, password=password, age=age, city=city, bio=bio)
-        db.session.add(newuser)
-        db.session.commit()
-        flash("Successfully created user", "success")
-        return redirect(url_for('login'))
+
+# @app.route("/register", methods=["POST"])
+# def register():
+#     '''
+#     creates a new user in the database if provided valid signup information
+#     '''
+#     if "uid" in session:
+#         return redirect(url_for('home'))
+#     # gets user information from POST request
+#     firstname = request.form['firstname']
+#     lastname = request.form['lastname']
+#     email = request.form['email']
+#     github = request.form['github']
+#     password = request.form['password']
+#     password2 = request.form['password2']
+#     age = int(request.form['age'])
+#     city = request.form['city']
+#     bio = request.form['bio']
+#     # looking if user with email in database already exists
+#     user = User.query.filter_by(email=email).first()
+#     if user != None:
+#         flash("Account with that email already exists", "error")
+#         return redirect(url_for('signup'))
+#     elif password != password2:
+#         flash("Passwords do not match", "error")
+#         return redirect(url_for('signup'))
+#     elif len(password) < 8:
+#         flash("Password must be at least 8 characters in length", "error")
+#         return redirect(url_for('signup'))
+#     # successfully add user to database
+#     else:
+#         newuser = User(firstname=firstname, lastname=lastname, email=email,
+#                        github=github, password=password, age=age, city=city, bio=bio)
+#         db.session.add(newuser)
+#         db.session.commit()
+#         flash("Successfully created user", "success")
+#         return redirect(url_for('login'))
 
 
 @app.route("/logout")
