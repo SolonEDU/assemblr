@@ -205,11 +205,12 @@ def register():
         return redirect(url_for('home'))
 
 
-@app.route('/profile')
+@app.route('/profile/<login>')
 @connect_required
-def profile():
+def profile(login):
     return render_template(
-        'profile.html'
+        'profile.html',
+        login=login
     )
 
 
@@ -352,16 +353,6 @@ def logout():
 #             "new_team.html",
 #             friends=friends
 #         )
-
-
-# @app.route("/profile/<uid>")
-# @login_required
-# def profile(uid):
-#     user = User.query.filter_by(uid=uid).first()
-#     return render_template(
-#         "profile.html",
-#         user=user
-#     )
 
 
 # @app.route("/team/<teamid>")

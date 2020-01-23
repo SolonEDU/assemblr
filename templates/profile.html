@@ -4,18 +4,10 @@
 
 
 {% block body %}
+<div class="container-fluid content">
 this is the profile page
-<!-- <div class="mt-4">
-    <div class="container p-5 bg-light text-dark" style="width: 100rem;">
-        <h1>{{user.firstname}} {{user.lastname}}</h1>
-        <hr>
-        <h3>GitHub Username: {{user.github}}</h3>
-        <h3>Email: {{user.email}}</h3>
-        <h3>Age: {{user.age}}</h3>
-        <h3>City: {{user.city}}</h3>
-        <br>
-        <h3>Bio and Skillset:</h3>
-        <div class="card">{{user.bio}}</div>
-    </div>
-</div> -->
+{% if session['login'] == login %}
+this is your profile
+{% endif %}
+</div>
 {% endblock %}

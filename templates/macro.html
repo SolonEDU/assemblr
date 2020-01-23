@@ -1,11 +1,13 @@
 {% macro nav_item(endpoint, name) %}
 {% if request.endpoint.endswith(endpoint) %}
 <li class="nav-item active">
-    <a class="nav-link" href="{{ url_for(endpoint) }}">{{name}}</a>
-</li>
 {% else %}
 <li class="nav-item">
-    <a class="nav-link" href="{{ url_for(endpoint) }}">{{name}}</a>
-</li>
 {% endif %}
+    {% if endpoint == "profile" %}
+    <a class='nav-link' href='{{ url_for(endpoint, login=session['login']) }}'>{{name}}</a>
+    {% else %}
+    <a class="nav-link" href="{{ url_for(endpoint) }}">{{name}}</a>
+    {% endif %}
+</li>
 {% endmacro %}
