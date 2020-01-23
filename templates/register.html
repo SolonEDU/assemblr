@@ -5,6 +5,7 @@
 {% block body %}
 
 <div id="register" class="content container text-center m-auto px-5">
+    {{ super() }}
     <form action='/register' method='POST'>
         <div class="form-group row">
             <label for='displayname' class='font-weight-bold col-sm-2 text-left'>Name</label>

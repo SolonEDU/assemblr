@@ -1,13 +1,9 @@
 import urllib.parse
 import urllib.request
 import os
-# import sqlite3
 import json
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
-# from flask_sqlalchemy import SQLAlchemy
-# from config import Config
-# from utl import models
 from google.cloud import firestore
 
 # db = models.db
@@ -72,6 +68,19 @@ def connect_required(f):
     return decorated_function
 
 
+def in_database(f):
+    '''
+    decorator that redirects user to registration page if not registered in database
+    '''
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not db.collection('users').document(session['login']).get().exists:
+            flash('You must be registered to view that page', "error")
+            return redirect(url_for('register'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route('/connect_to_github')
 def connect_to_github():
     github_auth_parameters = {
@@ -120,7 +129,11 @@ def callback():
     session['login'] = result['data']['viewer']['login']
     session['name'] = result['data']['viewer']['name']
 
-    if db.collection('users').document(session['login']).get().exists:
+    users_ref = db.collection('users')
+    viewer = users_ref.document(session['login']).get()
+
+    if viewer.exists:
+        session['image'] = viewer.get('image')
         return redirect(url_for('home'))
     else:
         return redirect(url_for('register'))
@@ -133,24 +146,19 @@ def root():
 
 @app.route('/home')
 @connect_required
+@in_database
 def home():
-    return render_template(
-        'home.html'
-    )
+    return render_template('home.html')
 
 
 @app.route('/about')
 def about():
-    return render_template(
-        'about.html'
-    )
+    return render_template('about.html')
 
 
 @app.route('/help')
 def help():
-    return render_template(
-        'help.html'
-    )
+    return render_template('help.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -163,6 +171,7 @@ def register():
                  '''
         {
             viewer {
+                avatarUrl
                 topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
                     edges {
                         node {
@@ -180,6 +189,8 @@ def register():
         result = graphql_query(query)
 
         languages = dict()
+
+        session['image'] = result['data']['viewer']['avatarUrl']
 
         for edge in result['data']['viewer']['topRepositories']['edges']:
             if not edge is None:
@@ -199,6 +210,7 @@ def register():
             'name': request.form['displayname'],
             'email': request.form['email'],
             'age': int(request.form['age']),
+            'image': session['image'],
             'languages': languages
         })
 
@@ -207,6 +219,7 @@ def register():
 
 @app.route('/profile/<login>')
 @connect_required
+@in_database
 def profile(login):
     return render_template(
         'profile.html',
@@ -214,6 +227,7 @@ def profile(login):
     )
 
 
+@connect_required
 @app.route('/logout')
 def logout():
     '''
@@ -222,6 +236,7 @@ def logout():
     session.pop('login')
     session.pop('name')
     session.pop('access_token')
+    session.pop('image')
     return redirect(url_for('root'))
 
 

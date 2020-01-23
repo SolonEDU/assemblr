@@ -67,6 +67,12 @@
                     {% endif %} -->
                 </ul>
                 <ul class="navbar-nav ml-auto">
+                    {% if not request.endpoint.endswith('register') %}
+                    {% if session['access_token'] %}
+                    <a class="m-auto" href="{{url_for( 'profile', login=session['login'])}}">
+                        <img style="height: 40px;" src="{{session['image']}}">
+                    </a>
+                    {% endif %}
                     <li class="nav-item navbar-right">
                         {% if session['access_token'] %}
                             {{ nav_item('profile', session['name']) }}
@@ -78,6 +84,7 @@
                     <li class="nav-item navbar-right">
                         {{ nav_item('logout', 'logout') }}
                     </li>
+                    {% endif %}
                     {% endif %}
                 </ul>
             </div>
