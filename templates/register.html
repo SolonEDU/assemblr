@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}
-    register
-{% endblock %}
+{% block title %} register {% endblock %}
 
 {% block body %}
 
@@ -38,18 +36,16 @@
             <span style="font-size: 11px;">(retrieved from repositories you've contributed to)</span>
         </div>
         <div class="row text-left px-3 pb-3 mx-2 mb-2">
-            {% if session['user_languages'] %}
-                {% for key, val in session['user_languages'].items() %}
-                <div class="col-sm-6 col-md-4 col-lg-3 py-2 custom-control custom-checkbox">
-                    <input type="checkbox" name="language" class="custom-control-input" value="{{key}}" id="{{key}}" checked>
-                    <label class="custom-control-label" for="{{key}}">
-                        <span class="dot" style="background-color: {{ val }}"></span>
-                        {{ key }}
-                    </label>
-                    <input type="hidden" name="{{key}}" value="{{val}}">
-                </div>
-                {% endfor %}
-            {% endif %}
+            {% for key, val in languages.items() %}
+            <div class="col-sm-6 col-md-4 col-lg-3 py-2 custom-control custom-checkbox">
+                <input type="checkbox" name="language" class="custom-control-input" value="{{key}}" id="{{key}}" checked>
+                <label class="custom-control-label" for="{{key}}">
+                    <span class="dot" style="background-color: {{ val }}"></span>
+                    {{ key }}
+                </label>
+                <input type="hidden" name="{{key}}" value="{{val}}">
+            </div>
+            {% endfor %}
         </div>
         <div class="row justify-content-end">
             <div class="col-sm-10 input-group mb-2">

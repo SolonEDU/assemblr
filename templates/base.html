@@ -66,18 +66,41 @@
                     GitHub specific things
                     {% endif %} -->
                 </ul>
-                <!-- <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto">
                     <li class="nav-item navbar-right">
-                        if connected to github
-                        show name
-                        else
-                        connect to github
+                        {% if session['access_token'] %}
+                            {{ nav_item('profile', session['name']) }}
+                        {% else %}
+                            {{ nav_item('connect_to_github', 'connect to github') }}
+                        {% endif %}
                     </li>
-                </ul> -->
+                    {% if session['access_token'] %}
+                    <li class="nav-item navbar-right">
+                        {{ nav_item('logout', 'logout') }}
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </nav>
 
         {% block body %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == "error" %}
+            <div class="alert alert-danger text-align-center alert-dismissible fade show" role="alert">
+            {% endif %}
+            {% if category == "success" %}
+            <div class="alert alert-success text-align-center alert-dismissible fade show" role="alert">
+            {% endif %}
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
         {% endblock %}
 
         {% block script %}
