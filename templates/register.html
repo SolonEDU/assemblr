@@ -11,13 +11,13 @@
         <div class="form-group row">
             <label for='displayname' class='font-weight-bold col-sm-2 text-left'>Name</label>
             <div class="col-sm-10">
-                <input name='displayname' type='text' class='form-control' id='displayname' value='{{ session['name'] }}' disabled required>
+                <input name='displayname' type='text' class='form-control' id='displayname' value='{{ session['name'] }}' readonly required>
             </div>
         </div>
         <div class="form-group row">
             <label for='username' class='font-weight-bold col-sm-2 text-left'>Username</label>
             <div class="col-sm-10">
-                <input name='username' type='text' class='form-control' id='username' value='{{ session['login'] }}' disabled required>
+                <input name='username' type='text' class='form-control' id='username' value='{{ session['login'] }}' readonly required>
             </div>
         </div>
         <div class="form-group row">
@@ -46,40 +46,31 @@
                         <span class="dot" style="background-color: {{ val }}"></span>
                         {{ key }}
                     </label>
+                    <input type="hidden" name="{{key}}" value="{{val}}">
                 </div>
                 {% endfor %}
             {% endif %}
         </div>
-        <div class="input-group mb-2">
-            <select class="custom-select" id="languageselect">
-              <option selected label="Add other languages you know"></option>
-              <!-- DUMMY LANGUAGES  -->
-              <!-- <option value="1">ABAP</option>
-              <option value="2">ABNF</option>
-              <option value="3">AMPL</option>
-              <option value="4">ANTLR</option>
-              <option value="5">APL</option>
-              <option value="6">ATS</option>
-              <option value="7">ActionScript</option>
-              <option value="8">Ada</option>
-              <option value="9">Agda</option>
-              <option value="10">AngelScript</option>
-              <option value="11">Apex</option> -->
-            </select>
-            <div class="input-group-append mb-2">
-              <button class="btn btn-dark" type="button">Add Language</button>
-            </div>
-          </div>
-        <div class="form-group row">
-            <label for="password" class="font-weight-bold col-sm-2 text-left">Password</label>
-            <div class="col-sm-10">
-                <input name="password" type="password" class="form-control" id="password" required>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="password2" class="font-weight-bold col-sm-2 text-left">Confirm Password</label>
-            <div class="col-sm-10">
-                <input name="password2" type="password" class="form-control" id="password2" required>
+        <div class="row justify-content-end">
+            <div class="col-sm-10 input-group mb-2">
+                <select class="custom-select" id="languageselect">
+                <option selected label="Add other languages you know"></option>
+                <!-- DUMMY LANGUAGES  -->
+                <!-- <option value="1">ABAP</option>
+                <option value="2">ABNF</option>
+                <option value="3">AMPL</option>
+                <option value="4">ANTLR</option>
+                <option value="5">APL</option>
+                <option value="6">ATS</option>
+                <option value="7">ActionScript</option>
+                <option value="8">Ada</option>
+                <option value="9">Agda</option>
+                <option value="10">AngelScript</option>
+                <option value="11">Apex</option> -->
+                </select>
+                <div class="input-group-append mb-2">
+                <button class="btn btn-dark" type="button">Add Language</button>
+                </div>
             </div>
         </div>
         <button type='submit' class='btn btn-lg btn-dark mb-5'>Register</button>
