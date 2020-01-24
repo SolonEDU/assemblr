@@ -24,10 +24,12 @@ app = Flask(__name__)
 # creates secret key for sessions
 app.secret_key = os.urandom(32)
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = f"{os.path.dirname(os.path.abspath(__file__))}/static/json/assemblr-28d528f0fb82.json"
+file = os.path.dirname(os.path.abspath(__file__))
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = f"{file}/static/json/assemblr-28d528f0fb82.json"
 db = firestore.Client()
 
-api_file = f"{os.path.dirname(os.path.abspath(__file__))}/static/json/api.json"
+api_file = f"{file}/static/json/api.json"
 
 with open(api_file, 'r') as read_file:
     keys = json.load(read_file)
