@@ -5,9 +5,28 @@
 
 {% block body %}
 <div class="container-fluid content">
-this is the profile page
-{% if session['login'] == login %}
-this is your profile
-{% endif %}
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <img style="max-width: 100%; height: auto;" src="{{session['image']}}">
+            <figcaption class="text-center mt-2">
+                {{ session['name'] }}
+                {% if session['login'] == login %}
+                <br>
+                <a href="#" class="m-2 badge badge-light">edit your profile</a>
+                {% endif %}
+            </figcaption>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-9">
+            languages
+            <br>
+            technologies
+            <br>
+            location
+            <br>
+            email
+            <br>
+            roles
+        </div>
+    </div>
 </div>
 {% endblock %}

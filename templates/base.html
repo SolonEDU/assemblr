@@ -59,12 +59,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav">
+                    {% if session['access_token'] %}
+                    {{ nav_item('network', 'network') }}
+                    {{ nav_item('projects', 'projects') }}
+                    {% endif %}
+
                     {{ nav_item('about', 'about') }}
                     {{ nav_item('help', 'help') }}
-
-                    <!-- {% if session['access_token'] %}
-                    GitHub specific things
-                    {% endif %} -->
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     {% if not request.endpoint.endswith('register') %}

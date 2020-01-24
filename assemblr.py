@@ -42,6 +42,9 @@ GITHUB_TOKEN_URL = 'https://github.com/login/oauth/access_token'
 
 
 def graphql_query(query):
+    '''
+    function to handle graphql queries to the github api
+    '''
     req = urllib.request.Request(
         GITHUB_API_ROUTE,
         data=query,
@@ -86,7 +89,7 @@ def connect_to_github():
     github_auth_parameters = {
         'client_id': GITHUB_CLIENT_ID,
         'redirect_uri': GITHUB_OAUTH_REDIRECT,
-        'scope': '',
+        'scope': 'user:email',
     }
     github_auth_parameters = "&".join(
         [f"{key}={value}" for key, value in github_auth_parameters.items()])
@@ -127,7 +130,9 @@ def callback():
     result = graphql_query(query)
 
     session['login'] = result['data']['viewer']['login']
-    session['name'] = result['data']['viewer']['name']
+    name = result['data']['viewer']['name']
+    if not name is None:
+        session['name'] = name
 
     users_ref = db.collection('users')
     viewer = users_ref.document(session['login']).get()
@@ -172,6 +177,7 @@ def register():
         {
             viewer {
                 avatarUrl
+                email
                 topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
                     edges {
                         node {
@@ -191,6 +197,7 @@ def register():
         languages = dict()
 
         session['image'] = result['data']['viewer']['avatarUrl']
+        session['email'] = result['data']['viewer']['email']
 
         for edge in result['data']['viewer']['topRepositories']['edges']:
             if not edge is None:
@@ -204,6 +211,10 @@ def register():
     else:
         languages = {language: request.form[language]
                      for language in request.form.getlist('language')}
+
+        session['name'] = request.form['displayname']
+
+        session.pop('email')
 
         doc_ref = db.collection('users').document(request.form['username'])
         doc_ref.set({
@@ -223,9 +234,26 @@ def register():
 def profile(login):
     return render_template(
         'profile.html',
-        login=login
+        login=login,
     )
 
+
+@app.route('/network')
+@connect_required
+@in_database
+def network():
+    return render_template(
+        'network.html'
+    )
+
+
+@app.route('/projects')
+@connect_required
+@in_database
+def projects():
+    return render_template(
+        'projects.html'
+    )
 
 @connect_required
 @app.route('/logout')
