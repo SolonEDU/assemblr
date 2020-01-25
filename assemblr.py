@@ -39,7 +39,8 @@ GITHUB_CLIENT_SECRET = keys['GITHUB_CLIENT_SECRET']
 
 GITHUB_OAUTH_ROUTE = 'https://github.com/login/oauth/authorize'
 GITHUB_OAUTH_REDIRECT = 'http://localhost:5000/callback'
-GITHUB_API_ROUTE = 'https://api.github.com/graphql'
+GITHUB_GRAPHQL_API_ROUTE = 'https://api.github.com/graphql'
+GITHUB_REST_API_ROUTE = 'https://api.github.com'
 GITHUB_TOKEN_URL = 'https://github.com/login/oauth/access_token'
 
 
@@ -76,10 +77,32 @@ def graphql_query(query):
     query = json.dumps({'query': query}).encode('utf8')
 
     req = urllib.request.Request(
-        GITHUB_API_ROUTE,
+        GITHUB_GRAPHQL_API_ROUTE,
         data=query,
         headers={'Authorization': f"Bearer {session['access_token']}"},
         method='POST'
+    )
+
+    req = urllib.request.urlopen(req)
+    res = req.read()
+
+    return json.loads(res)
+
+def rest_query(query, route, method):
+    '''
+    function to handle queries to the github rest api
+    '''
+
+    query = json.dumps(query).encode('utf8')
+
+    req = urllib.request.Request(
+        f"{GITHUB_REST_API_ROUTE}{route}",
+        headers = {
+            'Accept': 'application/vnd.github.v3+json',
+            'Authorization': f"token {session['access_token']}",
+        },
+        data=query,
+        method=method,
     )
 
     req = urllib.request.urlopen(req)
@@ -270,13 +293,27 @@ def network():
     )
 
 
-@app.route('/projects')
+@app.route('/projects', methods=['GET', 'POST'])
 @connect_required
 @in_database
 def projects():
-    return render_template(
-        'projects.html'
-    )
+    if request.method == 'GET':
+        return render_template(
+            'projects.html'
+        )
+    elif request.method == 'POST':
+        rest_query(
+            {
+                'name': 'assembly',
+                'description': 'created via the assemblr app',
+                'homepage': '',
+            },
+            '/user/repos',
+            'POST'
+        )
+        return render_template(
+            'projects.html'
+        )
 
 
 @connect_required
