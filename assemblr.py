@@ -73,7 +73,7 @@ def graphql_query(query):
     '''
     function to handle graphql queries to the github api
     '''
-    json.dumps({'query': query}).encode('utf8')
+    query = json.dumps({'query': query}).encode('utf8')
 
     req = urllib.request.Request(
         GITHUB_API_ROUTE,
@@ -164,7 +164,6 @@ def callback():
     session['access_token'] = access_token
 
     query = '{ viewer { login name } }'
-    query = json.dumps(query).encode('utf8')
 
     result = graphql_query(query)
 
@@ -249,10 +248,17 @@ def register():
 @connect_required
 @in_database
 def profile(login):
-    return render_template(
-        'profile.html',
-        login=login,
-    )
+    doc_ref = db.collection('users').document(login)
+    user = doc_ref.get()
+    if user.exists:
+        return render_template(
+            'profile.html',
+            login=login,
+            user=user.to_dict()
+        )
+    else:
+        flash("That user does not exist", 'error')
+        return redirect(url_for('home'))
 
 
 @app.route('/network')
