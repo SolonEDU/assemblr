@@ -73,6 +73,8 @@ def graphql_query(query):
     '''
     function to handle graphql queries to the github api
     '''
+    json.dumps({'query': query}).encode('utf8')
+
     req = urllib.request.Request(
         GITHUB_API_ROUTE,
         data=query,
@@ -87,25 +89,23 @@ def graphql_query(query):
 
 
 def get_register_info():
-    query = {'query':
-             '''
-        {
-            viewer {
-                avatarUrl
-                email
-                topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
-                    edges {
-                        node {
-                            languages(first: 3, orderBy: {direction: ASC, field: SIZE}) {
-                                edges { node { color name } }
-                            }
+    query = '''
+    {
+        viewer {
+            avatarUrl
+            email
+            topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
+                edges {
+                    node {
+                        languages(first: 3, orderBy: {direction: ASC, field: SIZE}) {
+                            edges { node { color name } }
                         }
                     }
                 }
             }
         }
-        '''}
-    query = json.dumps(query).encode('utf8')
+    }
+    '''
 
     result = graphql_query(query)
 
@@ -128,7 +128,7 @@ def connect_to_github():
     github_auth_parameters = {
         'client_id': GITHUB_CLIENT_ID,
         'redirect_uri': GITHUB_OAUTH_REDIRECT,
-        'scope': 'user:email',
+        'scope': 'user:email repo',
     }
     github_auth_parameters = "&".join(
         [f"{key}={value}" for key, value in github_auth_parameters.items()])
@@ -163,7 +163,7 @@ def callback():
 
     session['access_token'] = access_token
 
-    query = {'query': '{ viewer { login name } }'}
+    query = '{ viewer { login name } }'
     query = json.dumps(query).encode('utf8')
 
     result = graphql_query(query)
