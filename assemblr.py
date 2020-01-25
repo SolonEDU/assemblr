@@ -97,7 +97,7 @@ def get_register_info():
             topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
                 edges {
                     node {
-                        languages(first: 3, orderBy: {direction: ASC, field: SIZE}) {
+                        languages(first: 3, orderBy: {direction: DESC, field: SIZE}) {
                             edges { node { color name } }
                         }
                     }

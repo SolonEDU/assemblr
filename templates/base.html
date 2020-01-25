@@ -68,14 +68,12 @@
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     {% if not request.endpoint.endswith('register') %}
-                    {% if session['access_token'] %}
-                    <a class="m-auto" href="{{url_for( 'profile', login=session['login'])}}">
-                        <img style="height: 40px;" src="{{session['image']}}">
-                    </a>
-                    {% endif %}
                     <li class="nav-item navbar-right">
                         {% if session['access_token'] %}
                             {{ nav_item('profile', session['name']) }}
+                            <a class="m-auto pr-2" href="{{url_for( 'profile', login=session['login'])}}">
+                                <img style="height: 30px;" src="{{session['image']}}">
+                            </a>
                         {% else %}
                             {{ nav_item('connect_to_github', 'connect to github') }}
                         {% endif %}

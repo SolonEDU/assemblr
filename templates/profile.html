@@ -2,30 +2,39 @@
 
 {% block title %} profile {% endblock %}
 
-
 {% block body %}
 <div class="container-fluid content">
     <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-3">
-            <img style="max-width: 100%; height: auto;" src="{{session['image']}}">
-            <figcaption class="text-center mt-2">
-                {{ session['name'] }}
+            <img style="max-width: 100%; height: auto;" src="{{user['image']}}">
+            <figcaption class="pl-3 text-left mt-2">
+                {{ user['name'] }}
+                <br>
+                {{ user['email'] }}
+                <br>
+                location
                 {% if session['login'] == login %}
                 <br>
-                <a href="#" class="m-2 badge badge-light">edit your profile</a>
+                <a href="#" class="mt-2 badge badge-light">edit your profile</a>
                 {% endif %}
             </figcaption>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-9">
-            languages
-            <br>
-            technologies
-            <br>
-            location
-            <br>
-            email
-            <br>
-            roles
+            <div class="mb-2">
+                <div class="font-weight-bold h4">languages</div>
+                {% for language, color in user['languages'].items() %}
+                <div class="py-1">
+                    <span class="dot" style="background-color: {{ color }}"></span>
+                    {{ language }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="mb-2">
+                <div class="font-weight-bold h4">technologies</div>
+            </div>
+            <div class="mb-2">
+                <div class="font-weight-bold h4">roles</div>
+            </div>
         </div>
     </div>
 </div>
