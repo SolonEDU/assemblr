@@ -38,7 +38,7 @@ GITHUB_CLIENT_ID = keys['GITHUB_CLIENT_ID']
 GITHUB_CLIENT_SECRET = keys['GITHUB_CLIENT_SECRET']
 
 GITHUB_OAUTH_ROUTE = 'https://github.com/login/oauth/authorize'
-GITHUB_OAUTH_REDIRECT = 'http://localhost:5000/callback'
+GITHUB_OAUTH_REDIRECT = 'https://assemblr.solonedu.com/callback'
 GITHUB_GRAPHQL_API_ROUTE = 'https://api.github.com/graphql'
 GITHUB_REST_API_ROUTE = 'https://api.github.com'
 GITHUB_TOKEN_URL = 'https://github.com/login/oauth/access_token'
