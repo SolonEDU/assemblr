@@ -43,23 +43,6 @@ GITHUB_API_ROUTE = 'https://api.github.com/graphql'
 GITHUB_TOKEN_URL = 'https://github.com/login/oauth/access_token'
 
 
-def graphql_query(query):
-    '''
-    function to handle graphql queries to the github api
-    '''
-    req = urllib.request.Request(
-        GITHUB_API_ROUTE,
-        data=query,
-        headers={'Authorization': f"Bearer {session['access_token']}"},
-        method='POST'
-    )
-
-    req = urllib.request.urlopen(req)
-    res = req.read()
-
-    return json.loads(res)
-
-
 def connect_required(f):
     '''
     decorator that redirects user to landing page if not connected to github
@@ -84,6 +67,60 @@ def in_database(f):
             return redirect(url_for('register'))
         return f(*args, **kwargs)
     return decorated_function
+
+
+def graphql_query(query):
+    '''
+    function to handle graphql queries to the github api
+    '''
+    req = urllib.request.Request(
+        GITHUB_API_ROUTE,
+        data=query,
+        headers={'Authorization': f"Bearer {session['access_token']}"},
+        method='POST'
+    )
+
+    req = urllib.request.urlopen(req)
+    res = req.read()
+
+    return json.loads(res)
+
+
+def get_register_info():
+    query = {'query':
+             '''
+        {
+            viewer {
+                avatarUrl
+                email
+                topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
+                    edges {
+                        node {
+                            languages(first: 3, orderBy: {direction: ASC, field: SIZE}) {
+                                edges { node { color name } }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        '''}
+    query = json.dumps(query).encode('utf8')
+
+    result = graphql_query(query)
+
+    languages = dict()
+
+    session['image'] = result['data']['viewer']['avatarUrl']
+    session['email'] = result['data']['viewer']['email']
+
+    for edge in result['data']['viewer']['topRepositories']['edges']:
+        if not edge is None:
+            for language in edge['node']['languages']['edges']:
+                languages[language['node']['name']
+                          ] = language['node']['color']
+
+    return languages
 
 
 @app.route('/connect_to_github')
@@ -136,6 +173,7 @@ def callback():
     if not name is None:
         session['name'] = name
 
+    # checking user existence in database
     users_ref = db.collection('users')
     viewer = users_ref.document(session['login']).get()
 
@@ -174,43 +212,20 @@ def register():
     if db.collection('users').document(session['login']).get().exists:
         return redirect(url_for('home'))
     if request.method == 'GET':
-        query = {'query':
-                 '''
-        {
-            viewer {
-                avatarUrl
-                email
-                topRepositories(first: 20, orderBy: {direction: ASC, field: UPDATED_AT}) {
-                    edges {
-                        node {
-                            languages(first: 3, orderBy: {direction: ASC, field: SIZE}) {
-                                edges { node { color name } }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        '''}
-        query = json.dumps(query).encode('utf8')
+        languages = get_register_info()
+        add_languages = dict()
 
-        result = graphql_query(query)
+        docs = db.collection('languages').stream()
+        for doc in docs:
+            if not doc.id in languages:
+                add_languages[doc.id] = doc.to_dict()['color']
 
-        languages = dict()
-
-        session['image'] = result['data']['viewer']['avatarUrl']
-        session['email'] = result['data']['viewer']['email']
-
-        for edge in result['data']['viewer']['topRepositories']['edges']:
-            if not edge is None:
-                for language in edge['node']['languages']['edges']:
-                    languages[language['node']['name']
-                              ] = language['node']['color']
         return render_template(
             'register.html',
-            languages=languages
+            languages=languages,
+            add_languages=add_languages,
         )
-    else:
+    elif request.method == 'POST':
         languages = {language: request.form[language]
                      for language in request.form.getlist('language')}
 
@@ -257,6 +272,7 @@ def projects():
         'projects.html'
     )
 
+
 @connect_required
 @app.route('/logout')
 def logout():
@@ -268,42 +284,6 @@ def logout():
     session.pop('access_token')
     session.pop('image')
     return redirect(url_for('root'))
-
-
-# @app.route("/home")
-# @login_required
-# def home():
-#     uid = session['uid']
-#     teams = Member.query.filter_by(uid=uid).all()
-#     teamsData = {}
-#     for team in teams:
-#         membersUserArr = []
-#         teamid = team.teamid
-#         teamObject = Team.query.filter_by(id=teamid).first()
-#         members = Member.query.filter_by(teamid=teamid).all()
-#         for member in members:
-#             memberUser = User.query.filter_by(uid=member.uid).first()
-#             membersUserArr.append(memberUser)
-#         teamsData[teamObject] = membersUserArr
-#     return render_template(
-#         "home.html",
-#         teams=teamsData
-#     )
-
-
-# @app.route("/network")
-# @login_required
-# def network():
-#     uid = session['uid']
-#     friendids = Friend.query.filter_by(uid=uid).all()
-#     friends = []
-#     for friendid in friendids:
-#         friend = User.query.filter_by(uid=friendid.friend).first()
-#         print(friend)
-#         friends.append(friend)
-#     return render_template(
-#         "network.html", friends=friends
-#     )
 
 
 # @app.route("/find")
