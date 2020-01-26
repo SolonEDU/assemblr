@@ -38,7 +38,8 @@ GITHUB_CLIENT_ID = keys['GITHUB_CLIENT_ID']
 GITHUB_CLIENT_SECRET = keys['GITHUB_CLIENT_SECRET']
 
 GITHUB_OAUTH_ROUTE = 'https://github.com/login/oauth/authorize'
-GITHUB_OAUTH_REDIRECT = 'https://assemblr.solonedu.com/callback'
+GITHUB_OAUTH_REDIRECT = 'http://localhost:5000/callback'
+# GITHUB_OAUTH_REDIRECT = 'https://assemblr.solonedu.com/callback'
 GITHUB_GRAPHQL_API_ROUTE = 'https://api.github.com/graphql'
 GITHUB_REST_API_ROUTE = 'https://api.github.com'
 GITHUB_TOKEN_URL = 'https://github.com/login/oauth/access_token'
@@ -88,7 +89,8 @@ def graphql_query(query):
 
     return json.loads(res)
 
-def rest_query(query, route, method):
+
+def rest_query(query="", route="", method=""):
     '''
     function to handle queries to the github rest api
     '''
@@ -97,7 +99,7 @@ def rest_query(query, route, method):
 
     req = urllib.request.Request(
         f"{GITHUB_REST_API_ROUTE}{route}",
-        headers = {
+        headers={
             'Accept': 'application/vnd.github.v3+json',
             'Authorization': f"token {session['access_token']}",
         },
@@ -144,6 +146,10 @@ def get_register_info():
                           ] = language['node']['color']
 
     return languages
+
+
+def get_gitignore():
+    rest_query(route='/gitignore/templates', method='GET')
 
 
 @app.route('/connect_to_github')
@@ -303,13 +309,13 @@ def projects():
         )
     elif request.method == 'POST':
         rest_query(
-            {
+            query={
                 'name': 'assembly',
                 'description': 'created via the assemblr app',
                 'homepage': '',
             },
-            '/user/repos',
-            'POST'
+            route='/user/repos',
+            method='POST'
         )
         return render_template(
             'projects.html'
