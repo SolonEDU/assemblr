@@ -214,7 +214,17 @@ def callback():
 
 @app.route("/")
 def root():
-    return redirect(url_for('home')) if 'login' in session else render_template('landing.html')
+    if 'login' in session:
+        return redirect(url_for('home'))
+    else:
+        docs = db.collection('languages').stream()
+
+        languages = [doc.to_dict()['color'] for doc in docs]
+
+        return render_template(
+            'landing.html',
+            languages=languages
+        )
 
 
 @app.route('/home')
@@ -274,8 +284,6 @@ def register():
 
 
 @app.route('/profile/<login>')
-@connect_required
-@in_database
 def profile(login):
     doc_ref = db.collection('users').document(login)
     user = doc_ref.get()
@@ -287,7 +295,7 @@ def profile(login):
         )
     else:
         flash("That user does not exist", 'error')
-        return redirect(url_for('home'))
+        return redirect(url_for('root'))
 
 
 @app.route('/network')

@@ -21,6 +21,7 @@ html {
 }
 
 #landing {
+    position: relative;
     height: 100vh;
     align-items: center;
     justify-content: center;
@@ -32,6 +33,15 @@ html {
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
     font-size: 20px;
+    z-index: 0;
+}
+
+.back-landing {
+    visibility: hidden;
+    position: absolute;
+    height: 50px !important;
+    width: 50px !important;
+    z-index: -1;
 }
 
 #connect {

@@ -21,4 +21,10 @@ $(window).on('load', () => {
             }, 1000)
         }
     }, 200)
+    $(".back-landing").each(function () {
+        $(this).css('top', `${Math.floor(Math.random() * 94)}vh`)
+        $(this).css('left', `${Math.floor(Math.random() * 94)}vw`)
+        $(this).css('opacity', `${Math.random() * 0.5 + 0.4}`)
+    })
+    $(".back-landing").css("visibility", "visible");
 });

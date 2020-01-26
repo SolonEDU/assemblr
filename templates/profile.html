@@ -13,9 +13,11 @@
                 {{ user['email'] }}
                 <br>
                 location
-                {% if session['login'] == login %}
-                <br>
-                <a href="#" class="mt-2 badge badge-light">edit your profile</a>
+                {% if 'login' in session %}
+                    {% if session['login'] == login %}
+                    <br>
+                    <a href="#" class="mt-2 badge badge-light">edit your profile</a>
+                    {% endif %}
                 {% endif %}
             </figcaption>
         </div>
