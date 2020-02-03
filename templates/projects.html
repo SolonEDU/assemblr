@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %} projects {% endblock %}
+
+{% block body %}
+<div class="container-fluid content">
+    this is the projects page
+    <form action='/projects' method='POST'>
+        <button type='submit' class='btn btn-dark'>Create Repository</button>
+    </form>
+</div>
+{% endblock %}

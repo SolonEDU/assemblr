@@ -1,25 +1,43 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Profile
-{% endblock %}
-
-{% block display %}
-Account
-{% endblock %}
+{% block title %} profile {% endblock %}
 
 {% block body %}
-<div class="mt-4">
-    <div class="container p-5 bg-light text-dark" style="width: 100rem;">
-        <h1>{{user.firstname}} {{user.lastname}}</h1>
-        <hr>
-        <h3>GitHub Username: {{user.github}}</h3>
-        <h3>Email: {{user.email}}</h3>
-        <h3>Age: {{user.age}}</h3>
-        <h3>City: {{user.city}}</h3>
-        <br>
-        <h3>Bio and Skillset:</h3>
-        <div class="card">{{user.bio}}</div>
+<div class="container-fluid content">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <img style="max-width: 100%; height: auto;" src="{{user['image']}}">
+            <figcaption class="pl-3 text-left mt-2">
+                {{ user['name'] }}
+                <br>
+                {{ user['email'] }}
+                <br>
+                location
+                {% if 'login' in session %}
+                    {% if session['login'] == login %}
+                    <br>
+                    <a href="#" class="mt-2 badge badge-light">edit your profile</a>
+                    {% endif %}
+                {% endif %}
+            </figcaption>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-9">
+            <div class="mb-2">
+                <div class="font-weight-bold h4">languages</div>
+                {% for language, color in user['languages'].items() %}
+                <div class="py-1">
+                    <span class="dot" style="background-color: {{ color }}"></span>
+                    {{ language }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="mb-2">
+                <div class="font-weight-bold h4">technologies</div>
+            </div>
+            <div class="mb-2">
+                <div class="font-weight-bold h4">roles</div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -127,4 +127,18 @@ ehthumbs.db
 **/*[\\/\:;*?!'"<>|$º•¶§∞¢£]*
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Database #
 site.db
+
+# Visual Studio Code #
+.vscode
+
+# API Keys #
+api.json
+
+# Firebase #
+assemblr-28d528f0fb82.json
+firebase_config.json
+
+# Linguist Languages #
+languages.yml

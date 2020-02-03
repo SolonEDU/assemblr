@@ -1,68 +1,77 @@
 {% extends "base.html" %}
 
-{% block scroll %}
-<html style="overflow-y:scroll">
-{% endblock %}
-
-{% block title %}
-    Register
-{% endblock %}
-
-{% block color %}
-{% endblock %}
-
-{% block nav %}
-<div style="margin-top: 20px;">
-    <a href="/" class="nav-content">ASSEMBLR</a>
-</div>
-{% endblock %}
+{% block title %} register {% endblock %}
 
 {% block body %}
-<div id="landing">
-    <form class="p-5 bg-light text-dark text-center" action="/register" method="POST">
-        <p class="lead font-weight-bolder">REGISTER</h1>
-            <div class="form-group">
-                <label for="email" class="font-weight-bold">Email</label>
-                <input name="email" type="email" class="form-control" id="email" required>
+
+<div id="register" class="content container text-center m-auto px-5">
+    {{ super() }}
+    <form action='/register' method='POST'>
+        <div class="form-group row">
+            <label for='displayname' class='font-weight-bold col-sm-2 text-left'>Name</label>
+            <div class="col-sm-10">
+                {% if session['name'] %}
+                <input name='displayname' type='text' class='form-control' id='displayname' value='{{ session['name'] }}' readonly required>
+                {% else %}
+                <input name='displayname' type='text' class='form-control' id='displayname' value='' required>
+                {% endif %}
             </div>
-            <div class="form-group mr-1" style="float: left;">
-                <label for="firstname" class="font-weight-bold">First Name</label>
-                <input name="firstname" type="text" class="form-control" id="firstname" required>
+        </div>
+        <div class="form-group row">
+            <label for='username' class='font-weight-bold col-sm-2 text-left'>Username</label>
+            <div class="col-sm-10">
+                <input name='username' type='text' class='form-control' id='username' value='{{ session['login'] }}' readonly required>
             </div>
-            <div class="form-group" style="float:right;">
-                <label for="lastname" class="font-weight-bold">Last Name</label>
-                <input name="lastname" type="text" class="form-control" id="lastname" required>
+        </div>
+        <div class="form-group row">
+            <label for='email' class='font-weight-bold col-sm-2 text-left'>Email</label>
+            <div class="col-sm-10">
+                <input name='email' type='email' class='form-control' id='email' value='{{ session['email'] }}' required>
             </div>
-            <br>
-            <div class="form-group" style="float:left;">
-                <label for="age" class="font-weight-bold">Age</label>
+        </div>
+        <div class="form-group row">
+            <label for="age" class="font-weight-bold col-sm-2 text-left">Age</label>
+            <div class="col-sm-10">
                 <input name="age" type="number" class="form-control" id="age" required>
             </div>
-            <div class="form-group" style="float:right;">
-                <label for="city" class="font-weight-bold">City</label>
-                <input name="city" type="text" class="form-control" id="city" required>
-            </div>
+        </div>
+        <div>
+            Your Languages
             <br>
-            <div class="form-group">
-                <label for="github" class="font-weight-bold">Github Username</label>
-                <input name="github" type="text" class="form-control" id="github" required>
+            <span style="font-size: 11px;">(retrieved from repositories you've contributed to)</span>
+        </div>
+        <div id="mylanguages" class="row text-left px-3 pb-3 mx-2 mb-2">
+            {% for language, color in languages.items() %}
+            <div class="col-sm-6 col-md-4 col-lg-3 py-2 custom-control custom-checkbox">
+                <input type="checkbox" name="language" class="custom-control-input" value="{{language}}" id="{{language}}" checked>
+                <label class="custom-control-label" for="{{language}}">
+                    <span class="dot" style="background-color: {{ color }}"></span>
+                    {{ language }}
+                </label>
+                <input type="hidden" name="{{language}}" value="{{color}}">
             </div>
-            <div class="form-group">
-                <label for="bio" class="font-weight-bold">Bio and Skillset</label>
-                <textarea name="bio" type="text" class="form-control" id="bio" required></textarea>
+            {% endfor %}
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-10 input-group mb-2">
+                <select class="custom-select" id="languageselect">
+                    <option label="Add other languages you know"></option>
+                    {% for language, color in add_languages.items() %}
+                    <option id="{{language}}" value="{{color}}">
+                        {{ language }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append mb-2">
+                <button id="addlanguage" class="btn btn-dark" type="button">Add Language</button>
+                </div>
             </div>
-            <div class="form-group" style="float:left">
-                <label for="password" class="font-weight-bold">Password</label>
-                <input name="password" type="password" class="form-control" id="password" required>
-            </div>
-            <div class="form-group" style="float:right">
-                <label for="password2" class="font-weight-bold">Confirm Password</label>
-                <input name="password2" type="password" class="form-control" id="password2" required>
-            </div>
-            <br>
-            <button type="submit" class="btn btn-success">Register</button>
-            <br>
-            <a href=/login class="badge badge-light mt-3">Already have an account? Login</a>
+        </div>
+        <button type='submit' class='btn btn-lg btn-dark mb-5'>Register</button>
     </form>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
 {% endblock %}
