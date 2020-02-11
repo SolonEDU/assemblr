@@ -318,8 +318,8 @@ def projects():
     elif request.method == 'POST':
         rest_query(
             query={
-                'name': 'assembly',
-                'description': 'created via the assemblr app',
+                'name': request.form['name'],
+                'description': request.form['description'],
                 'homepage': '',
             },
             route='/user/repos',
@@ -479,24 +479,6 @@ def logout():
 #         members=members,
 #         devlog=devlog
 #     )
-
-
-# @app.route("/devlogentry/<projectid>", methods=['GET', 'POST'])
-# @login_required
-# def devlogentry(projectid):
-#     projectid = int(projectid)
-#     if request.method == 'POST':
-#         uid = session['uid']
-#         content = request.form['content']
-#         entry = Devlog(projectid=projectid, uid=uid, content=content)
-#         db.session.add(entry)
-#         db.session.commit()
-#         return redirect(url_for('project', projectid=projectid))
-#     else:
-#         return render_template(
-#             "new_devlog.html",
-#             projectid=projectid,
-#         )
 
 
 if __name__ == "__main__":
